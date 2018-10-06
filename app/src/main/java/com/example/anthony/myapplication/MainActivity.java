@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             failedatt--;
             Toast errpass = Toast.makeText(MainActivity.this, "Invalid Credentials "+failedatt+" attempts remaining", Toast.LENGTH_SHORT);
-
+            errpass.show();
             if(failedatt==0)
                 Login.setEnabled(false);
         }

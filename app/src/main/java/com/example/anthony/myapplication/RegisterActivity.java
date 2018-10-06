@@ -33,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     if(!passstr.equals(cpassstr)){
                         Toast errpass = Toast.makeText(RegisterActivity.this, "Passwords don't match", Toast.LENGTH_SHORT);
-                        //errpass.show();
+                        errpass.show();
                     }else{
                         //insert details in db
                         User u = new User();
