@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         Login = (Button) findViewById(R.id.Loginbutt);
         Register = (Button) findViewById(R.id.Registerbutt);
 
+
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+
 
     }
     private void validate (String userName, String userPassword){
