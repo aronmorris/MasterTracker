@@ -2,6 +2,7 @@ package com.example.anthony.myapplication;
 
 public class User {
 
+    //this is a simple user class for db
     private String name, uname, pass;
 
     /*public User(int id, String name, String uname, String pass) {
