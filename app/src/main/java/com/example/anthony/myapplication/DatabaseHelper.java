@@ -47,7 +47,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
-
+   /*search method for finding username and password
+   * checks for matching username then checks next column
+   * for password repeats for each column until a match is found
+   * could probably improve this by pointing it directly at the second column somehow
+   * */
     public String searchPass(String uname){
 
         SQLiteDatabase db = this.getReadableDatabase();

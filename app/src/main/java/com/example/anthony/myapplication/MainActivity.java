@@ -22,13 +22,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //telling the variables where they should get there info from on the app interface
         Name = (EditText)findViewById(R.id.namefield);
         Password = (EditText)findViewById(R.id.passfield);
         Login = (Button) findViewById(R.id.Loginbutt);
         Register = (Button) findViewById(R.id.Registerbutt);
 
-
+        //the action for buttons register and login
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,16 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void validate (String userName, String userPassword){
-
+        //validates that login creds are in the db
         String password = helper.searchPass(userName);
 
-
+        //hardcoded passwords for laziness
         if(userPassword.equals(password)||(userName.equals("Admin") && userPassword.equals("1234"))){
             Intent intent =new Intent(MainActivity.this, Main2Activity.class);
             finish();
             startActivity(intent);
         }else{
-            failedatt--;
+            failedatt--;//toast is for popups like toast pops out of a toaster
             Toast errpass = Toast.makeText(MainActivity.this, "Invalid Credentials "+failedatt+" attempts remaining", Toast.LENGTH_SHORT);
             errpass.show();
             if(failedatt==0)

@@ -18,7 +18,7 @@ import android.widget.Button;
 public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
-
+    //this was all done automagically so i dont really understand everthing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
 
         return super.onOptionsItemSelected(item);
     }
-
+    //navigation drawer options
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
