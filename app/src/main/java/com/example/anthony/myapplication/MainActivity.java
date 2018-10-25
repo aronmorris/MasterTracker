@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent =new Intent(MainActivity.this, RegisterActivity.class);
+                finish();//addded finish before starting new page to close the current page before moving on so back button doesn't go through unnecessary pages
                 startActivity(intent);
             }
         });
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(userPassword.equals(password)||(userName.equals("Admin") && userPassword.equals("1234"))){
             Intent intent =new Intent(MainActivity.this, Main2Activity.class);
+            finish();
             startActivity(intent);
         }else{
             failedatt--;

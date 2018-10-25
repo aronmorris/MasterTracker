@@ -44,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
                         helper.insertUser(u);
 
                         Intent intent =new Intent(RegisterActivity.this, MainActivity.class);
+                        finish();
                         startActivity(intent);
                     }
                 }
