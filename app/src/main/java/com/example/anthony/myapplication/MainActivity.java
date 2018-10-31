@@ -12,6 +12,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     private EditText Name;
     private EditText Password;
+    //private EditText EndoInfo;
     private TextView Info;
     private Button Login;
     private Button Register;

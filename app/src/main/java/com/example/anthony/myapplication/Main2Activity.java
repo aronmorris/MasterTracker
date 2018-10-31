@@ -14,10 +14,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
+import com.moomeen.endo2java.EndomondoSession;
+import com.moomeen.endo2java.error.InvocationException;
+import com.moomeen.endo2java.error.LoginException;
+import com.moomeen.endo2java.model.AccountInfo;
 
 public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    private final String userName="adrianna.kousik@gmail.com";
+    private final String password="comp354project";
     //this was all done automagically so i dont really understand everthing
 
     @Override
@@ -44,6 +50,16 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //getting the name
+        //EndomondoSession session = loginTest(userName,password);
+        String endoname="fghfghfg";
+        /*try{
+           endoname= session.getAccountInfo().getFirstName();
+        }catch(InvocationException e){
+            e.printStackTrace();
+        }*/
+        TextView textview = findViewById(R.id.tv_EndoInfo);
+        textview.setText(endoname);
     }
 
     @Override
@@ -101,5 +117,16 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public EndomondoSession loginTest(String userName,String password) {
+        EndomondoSession session = new EndomondoSession(userName, password);
+        try{
+            session.login();
+        }catch(LoginException e){
+            //LOG.error("exception while trying to login user: {}"+ userName+" "+ e);
+            System.err.println("exception while trying to login user: {"+ userName+"} {"+ e+"}");
+        }
+        return session;
     }
 }

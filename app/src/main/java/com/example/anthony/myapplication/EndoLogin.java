@@ -17,7 +17,7 @@ public class EndoLogin {
     String userName="adrianna.kousik@gmail.com";
     String password="comp354project";
 
-    public void loginTest() {
+    public EndomondoSession loginTest() {
         EndomondoSession session = new EndomondoSession(userName, password);
         try{
             session.login();
@@ -25,7 +25,7 @@ public class EndoLogin {
             //LOG.error("exception while trying to login user: {}"+ userName+" "+ e);
             System.err.println("exception while trying to login user: {"+ userName+"} {"+ e+"}");
         }
-
+        return session;
     }
 
 
