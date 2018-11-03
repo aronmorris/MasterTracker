@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_stats"
+            android:icon="@android:drawable/ic_menu_recent_history"
+            android:title="Task 1 Statistics" />
+        <item
+            android:id="@+id/nav_weather"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Task 2 Weather" />
+        <item
+            android:id="@+id/nav_predic"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Task 3 Predictions" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@android:drawable/ic_secure"
+            android:title="Logout" />
+    </group>
+
+</menu>
