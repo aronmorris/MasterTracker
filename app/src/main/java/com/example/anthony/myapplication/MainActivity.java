@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
         String password = helper.searchPass(userName);
 
         //hardcoded passwords for laziness
-        if(userPassword.equals(password)||(userName.equals("Admin") && userPassword.equals("1234"))){
+        //updated: usernames are case-irrelevant
+        if(userPassword.equals(password)||(userName.equalsIgnoreCase("Admin") && userPassword.equals("1234"))){
             Intent intent =new Intent(MainActivity.this, Main2Activity.class);
             finish();
             startActivity(intent);

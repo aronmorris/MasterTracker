@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="graph_options">
+        <item>Average Speed per Session</item>
+        <item>Average Duration per Session</item>
+        <item>Average Distance per Session</item>
+    </string-array>
+</resources>
