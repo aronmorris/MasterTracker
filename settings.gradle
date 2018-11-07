@@ -1,1 +1,1 @@
-include ':app', ':Endo2Java'
+include ':app', ':Endo2Java', ':Endo2Java'
