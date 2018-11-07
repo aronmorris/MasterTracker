@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import java.util.Arrays;
@@ -18,10 +17,6 @@ import java.util.List;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.moomeen.endo2java.EndomondoSession;
-import com.moomeen.endo2java.error.InvocationException;
-import com.moomeen.endo2java.error.LoginException;
-import com.moomeen.endo2java.model.AccountInfo;
 
 public class StatsActivity extends Activity {
     private Button EndLog;/**the button to login, this is temporary/for testing purposes**/
@@ -64,17 +59,7 @@ public class StatsActivity extends Activity {
         EndLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EndomondoSession session = new EndomondoSession(EMAIL, PASSWORD);
-                try{
-                    session.login();
-                    AccountInfo info = session.getAccountInfo();
-                    Ename.setText(info.getFirstName());
-                }catch(LoginException e){
-                    Toast.makeText(StatsActivity.this,"There was an error loging you in",Toast.LENGTH_SHORT).show();
-                }catch(InvocationException e){
-                    Ename.setText("Name not found");
-                }
-
+                new EndomondoTask().execute("adrianna.kousik@gmail.com","comp354project");
 
             }
         });
