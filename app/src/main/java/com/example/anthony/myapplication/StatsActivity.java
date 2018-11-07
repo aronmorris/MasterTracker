@@ -4,8 +4,12 @@ import android.app.Activity;
 
 import android.os.Bundle;
 
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.util.Arrays;
@@ -14,16 +18,26 @@ import java.util.List;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.moomeen.endo2java.EndomondoSession;
+import com.moomeen.endo2java.error.InvocationException;
+import com.moomeen.endo2java.error.LoginException;
+import com.moomeen.endo2java.model.AccountInfo;
 
 public class StatsActivity extends Activity {
-
+    private Button EndLog;/**the button to login, this is temporary/for testing purposes**/
+    private TextView Ename;/**for endomondo name, this is temporary/for testing purposes**/
+    private static final String EMAIL = "bobendo354@gmail.com";
+    private static final String PASSWORD = "concordia354";
     private LineGraphSeries<DataPoint> series;
     ListView lv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
+        EndLog =(Button) findViewById(R.id.bt_LogAttmpt);
+        Ename=(TextView)findViewById(R.id.tv_Endo_AccountName);
         GraphView graph=(GraphView) findViewById(R.id.graph);
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
@@ -46,6 +60,25 @@ public class StatsActivity extends Activity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, optList);
 
         lv.setAdapter(adapter);
+
+        EndLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EndomondoSession session = new EndomondoSession(EMAIL, PASSWORD);
+                try{
+                    session.login();
+                    AccountInfo info = session.getAccountInfo();
+                    Ename.setText(info.getFirstName());
+                }catch(LoginException e){
+                    Toast.makeText(StatsActivity.this,"There was an error loging you in",Toast.LENGTH_SHORT).show();
+                }catch(InvocationException e){
+                    Ename.setText("Name not found");
+                }
+
+
+            }
+        });
+
 
     }
 }
