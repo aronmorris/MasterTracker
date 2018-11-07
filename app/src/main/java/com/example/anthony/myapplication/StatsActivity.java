@@ -17,10 +17,12 @@ import java.util.List;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.moomeen.endo2java.model.AccountInfo;
 
-public class StatsActivity extends Activity {
+public class StatsActivity extends Activity implements AsyncResponse{
     private Button EndLog;/**the button to login, this is temporary/for testing purposes**/
     private TextView Ename;/**for endomondo name, this is temporary/for testing purposes**/
+    private EndomondoTask Etask = new EndomondoTask();
     private static final String EMAIL = "bobendo354@gmail.com";
     private static final String PASSWORD = "concordia354";
     private LineGraphSeries<DataPoint> series;
@@ -55,16 +57,22 @@ public class StatsActivity extends Activity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, optList);
 
         lv.setAdapter(adapter);
-
+        Etask.delegate=this;
         EndLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new EndomondoTask().execute("adrianna.kousik@gmail.com","comp354project");
+
+               Etask.execute("adrianna.kousik@gmail.com","comp354project");
 
             }
         });
 
 
+    }
+
+    @Override
+    public void proccessFinished(String output) {
+        Ename.setText(output);
     }
 }
 

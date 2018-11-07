@@ -18,6 +18,8 @@ import com.moomeen.endo2java.model.Workout;
 class EndomondoTask extends AsyncTask<String,Void,AccountInfo> {
     String userName="adrianna.kousik@gmail.com";
     String password="comp354project";
+    public AsyncResponse delegate =null;
+
     @Override
     protected AccountInfo doInBackground(String... strings) {
         EndomondoSession session = new EndomondoSession(strings[0], strings[1]);
@@ -38,8 +40,8 @@ class EndomondoTask extends AsyncTask<String,Void,AccountInfo> {
 
 
 
-    protected void onPostExecute(EndomondoSession session) {
-        // TODO: check this.exception
+    protected void onPostExecute(AccountInfo info) {
+        delegate.proccessFinished(info.getFirstName());
         // TODO: do something with the feed
     }
 

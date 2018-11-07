@@ -22,6 +22,10 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version:'2.4.3'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version:'2.4.3'
     compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version:'2.4.3'
+    // https://mvnrepository.com/artifact/javax.xml.stream/stax-api
+    compile group: 'javax.xml.stream', name: 'stax-api', version: '1.0-2'
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.12'
     compile (group: 'org.glassfish.jersey.core', name: 'jersey-client', version:'2.12'){
         exclude (group:'javax.inject', module:'javax.inject')
     }
