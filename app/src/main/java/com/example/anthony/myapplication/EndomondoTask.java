@@ -27,7 +27,7 @@ class EndomondoTask extends AsyncTask<String,Void,AccountInfo> {
         }catch(LoginException e){
             //LOG.error("exception while trying to login user: {}"+ userName+" "+ e);
 
-            Toast.makeText(,"There was an error loging you in",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(,"There was an error loging you in",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             // System.err.println("exception while trying to login user: {"+ userName+"} {"+ e+"}");
         }catch(InvocationException e){
