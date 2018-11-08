@@ -31,7 +31,8 @@ public class StatsActivity extends Activity implements AsyncResponse{
     private EndomondoTask Etask = new EndomondoTask();
     private static final String EMAIL = "bobendo354@gmail.com";
     private static final String PASSWORD = "concordia354";
-    private List<Workout> workouts;
+    //private List<Workout> workouts;
+    private Button graphbutton;
     private ArrayList<Double> avgspeeds =new ArrayList();
     private ArrayList durations=new ArrayList();
     private ArrayList<Double> distances=new ArrayList();
@@ -47,10 +48,9 @@ public class StatsActivity extends Activity implements AsyncResponse{
         setContentView(R.layout.activity_stats);
         EndLog =(Button) findViewById(R.id.bt_LogAttmpt);
         Ename=(TextView)findViewById(R.id.tv_Endo_AccountName);
-        GraphView graph=(GraphView) findViewById(R.id.graph);
+        graphbutton = (Button)findViewById(R.id.button1);
 
-        series =new LineGraphSeries<>(generateSpeedDate());
-        graph.addSeries(series);
+
 
         /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
 
@@ -83,21 +83,26 @@ public class StatsActivity extends Activity implements AsyncResponse{
             }
         });
 
+        graphbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GraphView graph=(GraphView) findViewById(R.id.graph);
+                series =new LineGraphSeries<>(generateSpeedDate());
+                graph.addSeries(series);
+            }
+        });
+
 
     }
 
     @Override
     public void proccessFinished(String output) {
-        Ename.setText(output);
+        /*Ename.setText(output);*/
     }
 
     @Override
-    public void proccessFinished(EndomondoSession session) {
-        try{
-            workouts = session.getWorkouts();
-        }catch(InvocationException e){
-            e.printStackTrace();
-        }
+    public void proccessFinished(List<Workout> workouts) {
+
         for (Workout witer: workouts){
             durations.add(witer.getDuration());
             distances.add(witer.getDistance());
