@@ -15,33 +15,36 @@ import com.moomeen.endo2java.model.Workout;
 
 
 
-class EndomondoTask extends AsyncTask<String,Void,AccountInfo> {
+class EndomondoTask extends AsyncTask<String,Void,EndomondoSession> {
     String userName="adrianna.kousik@gmail.com";
     String password="comp354project";
     public AsyncResponse delegate =null;
 
     @Override
-    protected AccountInfo doInBackground(String... strings) {
+    protected EndomondoSession doInBackground(String... strings) {
         EndomondoSession session = new EndomondoSession(strings[0], strings[1]);
         try{
             session.login();
-            return session.getAccountInfo();
+            return session;
         }catch(LoginException e){
             //LOG.error("exception while trying to login user: {}"+ userName+" "+ e);
 
             //Toast.makeText(,"There was an error loging you in",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             // System.err.println("exception while trying to login user: {"+ userName+"} {"+ e+"}");
-        }catch(InvocationException e){
+        }/*catch(InvocationException e){
             e.printStackTrace();
-        }
+        }*/
         return null;
     }
 
 
-
-    protected void onPostExecute(AccountInfo info) {
-        delegate.proccessFinished(info.getFirstName());
+    /**this method is called automatically
+    * and fed the return type of doInBackground
+     * after the execution of doInBackground succeeds**/
+    protected void onPostExecute(EndomondoSession session) {
+        /*delegate.proccessFinished(session.getAccountInfo().getFirstName());*/
+        delegate.proccessFinished(session);
         // TODO: do something with the feed
     }
 

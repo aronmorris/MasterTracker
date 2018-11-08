@@ -11,13 +11,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.moomeen.endo2java.model.AccountInfo;
+import com.moomeen.endo2java.EndomondoSession;
+import com.moomeen.endo2java.error.InvocationException;
+import com.moomeen.endo2java.model.Sport;
+import com.moomeen.endo2java.model.Workout;
+
+import javax.xml.datatype.Duration;
 
 public class StatsActivity extends Activity implements AsyncResponse{
     private Button EndLog;/**the button to login, this is temporary/for testing purposes**/
@@ -25,6 +31,12 @@ public class StatsActivity extends Activity implements AsyncResponse{
     private EndomondoTask Etask = new EndomondoTask();
     private static final String EMAIL = "bobendo354@gmail.com";
     private static final String PASSWORD = "concordia354";
+    private List<Workout> workouts;
+    private ArrayList<Double> avgspeeds =new ArrayList();
+    private ArrayList durations=new ArrayList();
+    private ArrayList<Double> distances=new ArrayList();
+    private List<DataPoint> dur_over_s;
+    private List<DataPoint> di_over_s;
     private LineGraphSeries<DataPoint> series;
     ListView lv;
 
@@ -37,7 +49,11 @@ public class StatsActivity extends Activity implements AsyncResponse{
         Ename=(TextView)findViewById(R.id.tv_Endo_AccountName);
         GraphView graph=(GraphView) findViewById(R.id.graph);
 
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+        series =new LineGraphSeries<>(generateSpeedDate());
+        graph.addSeries(series);
+
+        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+
                 new DataPoint(1, 5),
                 new DataPoint(2, 10),
                 new DataPoint(3, 15),
@@ -45,7 +61,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
                 new DataPoint(5, 6)
         });
 
-        graph.addSeries(series);
+        graph.addSeries(series);*/
 
         //map to XML
         lv = (ListView) findViewById(R.id.ListStatsView);
@@ -73,6 +89,32 @@ public class StatsActivity extends Activity implements AsyncResponse{
     @Override
     public void proccessFinished(String output) {
         Ename.setText(output);
+    }
+
+    @Override
+    public void proccessFinished(EndomondoSession session) {
+        try{
+            workouts = session.getWorkouts();
+        }catch(InvocationException e){
+            e.printStackTrace();
+        }
+        for (Workout witer: workouts){
+            durations.add(witer.getDuration());
+            distances.add(witer.getDistance());
+            avgspeeds.add(witer.getSpeedAvg());
+        }
+
+    }
+
+    private DataPoint[] generateSpeedDate(){
+        int count=avgspeeds.size();
+        DataPoint[] values = new DataPoint[count];
+
+        for (int i=0;i<count;i++){
+            DataPoint v = new DataPoint(i,avgspeeds.get(i));
+            values[i]=v;
+        }
+        return values;
     }
 }
 
