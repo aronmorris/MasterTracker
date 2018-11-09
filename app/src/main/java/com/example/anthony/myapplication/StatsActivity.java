@@ -80,46 +80,61 @@ public class StatsActivity extends Activity implements AsyncResponse{
                 });
             }
         }, 3000);
+
+        /**the on click listener for the listview
+         * check to see which item in the list view is clicked
+         * gives int i for the specific item clicked
+         * inside we check if each item in the list is activated
+         * if it is not then it has already been clicked
+         * and should not be clickable **/
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i==0){
-                    GraphView graph=(GraphView) findViewById(R.id.graph);
-                    GridLabelRenderer gridLabeX = graph.getGridLabelRenderer();
-                    GridLabelRenderer gridLabeY = graph.getGridLabelRenderer();
-                    series =new LineGraphSeries<>(generateSpeedData());
-                    series.setColor(Color.RED);
-                    series.setDrawDataPoints(true);
-                    series.setDataPointsRadius(10);
-                    series.setThickness(8);
-                    series.setTitle("Average Speed (KM/h)");
-                    graph.addSeries(series);
-                    graph.getViewport().setScalableY(true);
-                    graph.getViewport().setScalable(true);
-                    gridLabeX.setHorizontalAxisTitle("Sessions");
-                    gridLabeY.setVerticalAxisTitle("Average Speed (KM/h)");
-                    graph.getLegendRenderer().setVisible(true);
-                    graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                    if(lv.getChildAt(0).isEnabled()){
+                        GraphView graph=(GraphView) findViewById(R.id.graph);
+                        GridLabelRenderer gridLabeX = graph.getGridLabelRenderer();
+                        GridLabelRenderer gridLabeY = graph.getGridLabelRenderer();
+                        series =new LineGraphSeries<>(generateSpeedData());
+                        series.setColor(Color.RED);
+                        series.setDrawDataPoints(true);
+                        series.setDataPointsRadius(10);
+                        series.setThickness(8);
+                        series.setTitle("Average Speed (KM/h)");
+                        graph.addSeries(series);
+                        graph.getViewport().setScalableY(true);
+                        graph.getViewport().setScalable(true);
+                        gridLabeX.setHorizontalAxisTitle("Sessions");
+                        gridLabeY.setVerticalAxisTitle("Average Speed (KM/h)");
+                        graph.getLegendRenderer().setVisible(true);
+                        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                        lv.getChildAt(0).setEnabled(false);
+                    }
+
                 }else if (i==1){
 
                 }else if(i==2){
-                    GraphView graph=(GraphView) findViewById(R.id.graph);
-                    GridLabelRenderer gridLabeX = graph.getGridLabelRenderer();
-                    GridLabelRenderer gridLabeY = graph.getGridLabelRenderer();
-                    series2 =new LineGraphSeries<>(generateDistanceData());
-                    series2.setColor(Color.GREEN);
-                    series2.setDrawDataPoints(true);
-                    series2.setDataPointsRadius(10);
-                    series2.setThickness(4);
-                    series2.setTitle("Distance (KM)");
-                    graph.addSeries(series2);
-                    graph.getViewport().setScalableY(true);
-                    graph.getViewport().setScalable(true);
-                    gridLabeX.setHorizontalAxisTitle("Sessions");
-                    gridLabeY.setVerticalAxisTitle("Distance (KM)");
-                    graph.getLegendRenderer().setVisible(true);
-                    graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                    if(lv.getChildAt(2).isEnabled()){
+                        GraphView graph=(GraphView) findViewById(R.id.graph);
+                        GridLabelRenderer gridLabeX = graph.getGridLabelRenderer();
+                        GridLabelRenderer gridLabeY = graph.getGridLabelRenderer();
+                        series2 =new LineGraphSeries<>(generateDistanceData());
+                        series2.setColor(Color.GREEN);
+                        series2.setDrawDataPoints(true);
+                        series2.setDataPointsRadius(10);
+                        series2.setThickness(4);
+                        series2.setTitle("Distance (KM)");
+                        graph.addSeries(series2);
+                        graph.getViewport().setScalableY(true);
+                        graph.getViewport().setScalable(true);
+                        gridLabeX.setHorizontalAxisTitle("Sessions");
+                        gridLabeY.setVerticalAxisTitle("Distance (KM)");
+                        graph.getLegendRenderer().setVisible(true);
+                        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                        lv.getChildAt(2).setEnabled(false);
+                    }
+
                 }
             }
         });
