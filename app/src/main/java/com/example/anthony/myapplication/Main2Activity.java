@@ -22,9 +22,6 @@ import com.moomeen.endo2java.model.AccountInfo;
 
 public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final String userName="adrianna.kousik@gmail.com";
-    private final String password="comp354project";
-    //this was all done automagically so i dont really understand everthing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +30,8 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -52,12 +43,9 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         navigationView.setNavigationItemSelectedListener(this);
         //getting the name
         //EndomondoSession session = loginTest(userName,password);
-        String endoname="fghfghfg";
-        /*try{
-           endoname= session.getAccountInfo().getFirstName();
-        }catch(InvocationException e){
-            e.printStackTrace();
-        }*/
+        String endoname="You have successfully connected your Endomondo account to Master Tracker! \n" +
+                "Use the drop down menu at the top left corner to view your statistics";
+
         TextView textview = findViewById(R.id.tv_EndoInfo);
         textview.setText(endoname);
     }
@@ -119,14 +107,5 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
-    public EndomondoSession loginTest(String userName,String password) {
-        EndomondoSession session = new EndomondoSession(userName, password);
-        try{
-            session.login();
-        }catch(LoginException e){
-            //LOG.error("exception while trying to login user: {}"+ userName+" "+ e);
-            System.err.println("exception while trying to login user: {"+ userName+"} {"+ e+"}");
-        }
-        return session;
-    }
+
 }

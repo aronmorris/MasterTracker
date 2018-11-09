@@ -14,8 +14,8 @@ import com.moomeen.endo2java.model.Workout;
 
 public class EndomondoSessionTest {
 
-	private static final String EMAIL = System.getenv("ENDOMONDO_EMAIL");
-	private static final String PASSWORD = System.getenv("ENDOMONDO_PASSWORD");
+	private static final String EMAIL = "bobendo354@gmail.com";
+	private static final String PASSWORD = "concordia354";
 
 	@Test
 	public void loginTest() throws LoginException {

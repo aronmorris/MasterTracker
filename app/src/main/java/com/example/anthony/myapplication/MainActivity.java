@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         //hardcoded passwords for laziness
         //updated: usernames are case-irrelevant
         if(userPassword.equals(password)||(userName.equalsIgnoreCase("Admin") && userPassword.equals("1234"))){
-            Intent intent =new Intent(MainActivity.this, Main2Activity.class);
+            Intent intent =new Intent(MainActivity.this, EndoLoginScreen.class);
             finish();
             startActivity(intent);
         }else{
