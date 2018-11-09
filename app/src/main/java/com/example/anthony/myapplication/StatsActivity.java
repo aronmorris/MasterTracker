@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,6 +15,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -26,7 +27,7 @@ import com.moomeen.endo2java.model.Workout;
 
 public class StatsActivity extends Activity implements AsyncResponse{
     private TextView Ename;/**for endomondo name, this is temporary/for testing purposes**/
-    private EndomondoWorkoutTask Etask = new EndomondoWorkoutTask();
+    private EndomondoWorkoutTask eWtask = new EndomondoWorkoutTask();
     private EndomondoAccountTask eATask = new EndomondoAccountTask();
     private static final String EMAIL = "bobendo354@gmail.com";
     private static final String PASSWORD = "concordia354";
@@ -46,11 +47,10 @@ public class StatsActivity extends Activity implements AsyncResponse{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
         Ename = (TextView)findViewById(R.id.textView5);
-        Etask.delegate=this;
+        eWtask.delegate=this;
         eATask.delegate=this;
+        eWtask.execute("adrianna.kousik@gmail.com","comp354project");
         eATask.execute("adrianna.kousik@gmail.com","comp354project");
-        Etask.execute("adrianna.kousik@gmail.com","comp354project");
-
 
 
         //map to XML
@@ -63,8 +63,25 @@ public class StatsActivity extends Activity implements AsyncResponse{
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, optList);
 
         lv.setAdapter(adapter);
+        /**Disable the button outright
+         * then delay its activation by 3 seconds**/
+        lv.setEnabled(false);
+        Timer buttonTimer = new Timer();
+        buttonTimer.schedule(new TimerTask() {
 
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        lv.setEnabled(true);
+                    }
+                });
+            }
+        }, 3000);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i==0){
