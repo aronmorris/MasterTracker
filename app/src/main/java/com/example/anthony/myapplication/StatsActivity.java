@@ -52,16 +52,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
 
 
 
-        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-
-                new DataPoint(1, 5),
-                new DataPoint(2, 10),
-                new DataPoint(3, 15),
-                new DataPoint(4, 12),
-                new DataPoint(5, 6)
-        });
-
-        graph.addSeries(series);*/
+        
 
         //map to XML
         lv = (ListView) findViewById(R.id.ListStatsView);
