@@ -3,11 +3,15 @@ package com.example.anthony.myapplication;
 import android.app.Activity;
 
 import android.graphics.Color;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -41,17 +45,39 @@ public class StatsActivity extends Activity implements AsyncResponse{
     private LineGraphSeries<DataPoint> series2;
     ListView lv;
 
+    //private EndomondoSession endoAcc;
+    private User user=new User();
+    private List<Workout> listOfWorkouts;
+    private EndomondoTask eTask = new EndomondoTask();
+    private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
+        Intent intent = getIntent();
+        user = (User)intent.getSerializableExtra("User");
+        //pass the string from begining....
+         //endoAcc = new EndomondoSession(email,password);
+         tv = (TextView)findViewById(R.id.textView6);
+         eTask.delegate=this;
+         eTask.execute(user.getEndomodoname(),user.getEndomondopass());
         Ename = (TextView)findViewById(R.id.textView5);
         eWtask.delegate=this;
         eATask.delegate=this;
         eWtask.execute("adrianna.kousik@gmail.com","comp354project");
         eATask.execute("adrianna.kousik@gmail.com","comp354project");
 
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+                new DataPoint(1, 5),
+                new DataPoint(2, 10),
+                new DataPoint(3, 15),
+                new DataPoint(4, 12),
+                new DataPoint(5, 6)
+        });
+
+        graph.addSeries(series);
 
         //map to XML
         lv = (ListView) findViewById(R.id.ListStatsView);

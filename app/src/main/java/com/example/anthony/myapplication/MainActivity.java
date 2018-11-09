@@ -12,12 +12,13 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     private EditText Name;
     private EditText Password;
-    //private EditText EndoInfo;
+    private User u1=new User();
     private TextView Info;
     private Button Login;
     private Button Register;
     private int failedatt = 5;
     DatabaseHelper helper = new DatabaseHelper(this);
+    public String passObj = "Pass along";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
         //hardcoded passwords for laziness
         //updated: usernames are case-irrelevant
         if(userPassword.equals(password)||(userName.equalsIgnoreCase("Admin") && userPassword.equals("1234"))){
-            Intent intent =new Intent(MainActivity.this, Main2Activity.class);
+            u1.setName(helper.searchName(userName));
+            u1.setUname(userName);
+            Intent intent =new Intent(MainActivity.this, EndoLoginScreen.class);
+            intent.putExtra("User",u1);
             finish();
             startActivity(intent);
         }else{

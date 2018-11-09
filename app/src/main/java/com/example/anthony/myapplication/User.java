@@ -1,16 +1,25 @@
 package com.example.anthony.myapplication;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     //this is a simple user class for db
-    private String name, uname, pass;
+    private String name;
+    private String uname;
+    private String pass;
+    private String endomodoname;
+    private String endomondopass;
 
-    /*public User(int id, String name, String uname, String pass) {
-        this.id = id;
+
+    public User() {
+        this.name ="Default";
+        this.uname = "Default";
+    }
+    public User( String name, String uname) {
         this.name = name;
         this.uname = uname;
-        this.pass = pass;
-    }*/
+    }
 
     public String getName() {
         return name;
@@ -32,7 +41,21 @@ public class User {
     public String getPass() {
         return pass;
     }
+    public String getEndomodoname() {
+        return endomodoname;
+    }
 
+    public void setEndomodoname(String endomodoname) {
+        this.endomodoname = endomodoname;
+    }
+
+    public String getEndomondopass() {
+        return endomondopass;
+    }
+
+    public void setEndomondopass(String endomondopass) {
+        this.endomondopass = endomondopass;
+    }
 
 
 

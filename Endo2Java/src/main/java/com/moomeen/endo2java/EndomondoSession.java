@@ -1,5 +1,6 @@
 package com.moomeen.endo2java;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -2,6 +2,7 @@ package com.example.anthony.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -20,27 +21,25 @@ import com.moomeen.endo2java.error.InvocationException;
 import com.moomeen.endo2java.error.LoginException;
 import com.moomeen.endo2java.model.AccountInfo;
 
-public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.List;
 
-    private final String userName="adrianna.kousik@gmail.com";
-    private final String password="comp354project";
-    //this was all done automagically so i dont really understand everthing
+public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private String email;
+    private String password;
+    private User user=new User();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Intent i = getIntent();
+        user=(User)i.getSerializableExtra("User");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -52,12 +51,9 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         navigationView.setNavigationItemSelectedListener(this);
         //getting the name
         //EndomondoSession session = loginTest(userName,password);
-        String endoname="fghfghfg";
-        /*try{
-           endoname= session.getAccountInfo().getFirstName();
-        }catch(InvocationException e){
-            e.printStackTrace();
-        }*/
+        String endoname="You have successfully connected your Endomondo account to Master Tracker! \n" +
+                "Use the drop down menu at the top left corner to view your statistics";
+
         TextView textview = findViewById(R.id.tv_EndoInfo);
         textview.setText(endoname);
     }
@@ -103,6 +99,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
 
         if (id == R.id.nav_stats) {
             Intent intent = new Intent(Main2Activity.this, StatsActivity.class);
+            intent.putExtra("User",user);
             startActivity(intent);
         } else if (id == R.id.nav_weather) {
             Intent intent = new Intent(Main2Activity.this, WeatherActivity.class);
@@ -119,14 +116,5 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
-    public EndomondoSession loginTest(String userName,String password) {
-        EndomondoSession session = new EndomondoSession(userName, password);
-        try{
-            session.login();
-        }catch(LoginException e){
-            //LOG.error("exception while trying to login user: {}"+ userName+" "+ e);
-            System.err.println("exception while trying to login user: {"+ userName+"} {"+ e+"}");
-        }
-        return session;
-    }
+
 }
