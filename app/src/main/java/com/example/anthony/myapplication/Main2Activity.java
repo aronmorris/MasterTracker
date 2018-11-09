@@ -2,6 +2,7 @@ package com.example.anthony.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -20,11 +21,21 @@ import com.moomeen.endo2java.error.InvocationException;
 import com.moomeen.endo2java.error.LoginException;
 import com.moomeen.endo2java.model.AccountInfo;
 
+import java.util.List;
+
 public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private String email;
+    private String password;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Intent intent = getIntent();
+         email = intent.getExtras().getString("email");
+         password = intent.getExtras().getString("password");
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -91,6 +102,8 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
 
         if (id == R.id.nav_stats) {
             Intent intent = new Intent(Main2Activity.this, StatsActivity.class);
+            intent.putExtra("email",email);
+            intent.putExtra("password",password);
             startActivity(intent);
         } else if (id == R.id.nav_weather) {
             Intent intent = new Intent(Main2Activity.this, WeatherActivity.class);

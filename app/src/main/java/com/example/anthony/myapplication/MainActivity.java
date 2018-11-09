@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private Button Register;
     private int failedatt = 5;
     DatabaseHelper helper = new DatabaseHelper(this);
+    public String passObj = "Pass along";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
