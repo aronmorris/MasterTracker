@@ -15,7 +15,7 @@ import com.moomeen.endo2java.model.Workout;
 import java.util.List;
 
 
-class EndomondoTask extends AsyncTask<String,Void,List<Workout>> {
+class EndomondoWorkoutTask extends AsyncTask<String,Void,List<Workout>> {
     String userName="adrianna.kousik@gmail.com";
     String password="comp354project";
     public AsyncResponse delegate =null;
