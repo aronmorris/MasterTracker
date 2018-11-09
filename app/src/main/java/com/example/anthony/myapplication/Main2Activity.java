@@ -26,21 +26,18 @@ import java.util.List;
 public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private String email;
     private String password;
+    private User user=new User();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Intent intent = getIntent();
-         email = intent.getExtras().getString("email");
-         password = intent.getExtras().getString("password");
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        Intent i = getIntent();
+        user=(User)i.getSerializableExtra("User");
 
 
 
@@ -102,8 +99,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
 
         if (id == R.id.nav_stats) {
             Intent intent = new Intent(Main2Activity.this, StatsActivity.class);
-            intent.putExtra("email",email);
-            intent.putExtra("password",password);
+            intent.putExtra("User",user);
             startActivity(intent);
         } else if (id == R.id.nav_weather) {
             Intent intent = new Intent(Main2Activity.this, WeatherActivity.class);

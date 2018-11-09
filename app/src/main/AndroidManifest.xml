@@ -30,7 +30,7 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".PredictActivity" />
-        <activity android:name=".EndoLoginScreen"></activity>
+        <activity android:name=".EndoLoginScreen" />
     </application>
 
 </manifest>

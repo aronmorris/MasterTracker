@@ -52,6 +52,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
    * for password repeats for each column until a match is found
    * could probably improve this by pointing it directly at the second column somehow
    * */
+
+    public String searchName(String uname){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select uname, name from "+ TABLE_NAME;
+        Cursor cursor = db.rawQuery(query,null);
+        String a,name;
+        name="not found";
+        if(cursor.moveToFirst()){
+            do {
+                a = cursor.getString(0);
+
+                if (a.equals(uname)){
+                    name = cursor.getString(1);
+                    break;
+                }
+            }while(cursor.moveToNext());
+        }
+
+        return name;
+    }
     public String searchPass(String uname){
 
         SQLiteDatabase db = this.getReadableDatabase();
