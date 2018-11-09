@@ -31,15 +31,7 @@ public class PredictActivity extends AppCompatActivity {
                 new DataPoint(4, 12),
                 new DataPoint(5, 6)
         });
-        //  series=new LineGraphSeries<DataPoint>();
-
-        //  int numDataPoints=500;
-        //   for(int i=0;i<numDataPoints;i++){
-        //   x=x+0.1;
-        //   y=Math.sin(x);
-
-        //    series.appendData(new DataPoint(x,y),true,500);
-        //  }
+      
         graph.addSeries(series);
 
 
