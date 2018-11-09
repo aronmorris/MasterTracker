@@ -45,11 +45,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
     private LineGraphSeries<DataPoint> series2;
     ListView lv;
 
-    //private EndomondoSession endoAcc;
     private User user=new User();
-    private List<Workout> listOfWorkouts;
-    private EndomondoTask eTask = new EndomondoTask();
-    private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,25 +55,12 @@ public class StatsActivity extends Activity implements AsyncResponse{
         Intent intent = getIntent();
         user = (User)intent.getSerializableExtra("User");
         //pass the string from begining....
-         //endoAcc = new EndomondoSession(email,password);
-         tv = (TextView)findViewById(R.id.textView6);
-         eTask.delegate=this;
-         eTask.execute(user.getEndomodoname(),user.getEndomondopass());
         Ename = (TextView)findViewById(R.id.textView5);
         eWtask.delegate=this;
         eATask.delegate=this;
-        eWtask.execute("adrianna.kousik@gmail.com","comp354project");
-        eATask.execute("adrianna.kousik@gmail.com","comp354project");
+        eWtask.execute(user.getEndomodoname(),user.getEndomondopass());
+        eATask.execute(user.getEndomodoname(),user.getEndomondopass());
 
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(1, 5),
-                new DataPoint(2, 10),
-                new DataPoint(3, 15),
-                new DataPoint(4, 12),
-                new DataPoint(5, 6)
-        });
-
-        graph.addSeries(series);
 
         //map to XML
         lv = (ListView) findViewById(R.id.ListStatsView);
@@ -182,6 +165,11 @@ public class StatsActivity extends Activity implements AsyncResponse{
             distances.add(witer.getDistance());
             avgspeeds.add(witer.getSpeedAvg());
         }
+
+    }
+
+    @Override
+    public void proccessFinished(boolean islogedin) {
 
     }
 

@@ -11,4 +11,6 @@ public interface AsyncResponse {
 
     void proccessFinished(List<Workout> workouts);
 
+    void proccessFinished(boolean islogedin);
+
 }

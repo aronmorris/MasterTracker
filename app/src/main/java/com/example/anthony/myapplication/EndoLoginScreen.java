@@ -15,6 +15,9 @@ import android.widget.Toast;
 import com.moomeen.endo2java.EndomondoSession;
 import com.moomeen.endo2java.error.InvocationException;
 import com.moomeen.endo2java.error.LoginException;
+import com.moomeen.endo2java.model.Workout;
+
+import java.util.List;
 
 public class EndoLoginScreen extends AppCompatActivity implements AsyncResponse{
 
@@ -89,9 +92,15 @@ public class EndoLoginScreen extends AppCompatActivity implements AsyncResponse{
     }
 
     @Override
-    public void proccessFinished(boolean logedin) {
-            isloggedin=logedin;
+    public void proccessFinished(List<Workout> workouts) {
+
     }
+
+    @Override
+    public void proccessFinished(boolean islogedin) {
+
+    }
+
 }
 
 

@@ -16,18 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
-import com.moomeen.endo2java.EndomondoSession;
-import com.moomeen.endo2java.error.InvocationException;
-import com.moomeen.endo2java.error.LoginException;
-import com.moomeen.endo2java.model.AccountInfo;
 
-import java.util.List;
+
 
 public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private String email;
-    private String password;
-    private User user=new User();
 
+    private User user=new User();
+    private TextView changecreds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +33,17 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         setSupportActionBar(toolbar);
         Intent i = getIntent();
         user=(User)i.getSerializableExtra("User");
+        changecreds = (TextView)findViewById(R.id.textView3);
 
-
-
+        changecreds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i2=new Intent(Main2Activity.this, EndoLoginScreen.class);
+                i2.putExtra("User",user);
+                finish();
+                startActivity(i2);
+            }
+        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
