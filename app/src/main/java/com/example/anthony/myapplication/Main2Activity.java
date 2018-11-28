@@ -22,6 +22,8 @@ import com.moomeen.endo2java.model.Workout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,AsyncResponse{
@@ -83,6 +85,8 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main2, menu);
+
+
         return true;
     }
 
@@ -106,10 +110,10 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_stats) {
-
             Intent intent = new Intent(Main2Activity.this, StatsActivity.class);
             intent.putExtra("User",user);
             startActivity(intent);
@@ -128,6 +132,32 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu (Menu menu) {
+
+        NavigationView navigationView= findViewById(R.id.nav_view);
+
+        Menu menuNav=navigationView.getMenu();
+        final MenuItem nav_item2 = menuNav.findItem(R.id.nav_stats);
+        nav_item2.setEnabled(false);
+
+        nav_item2.setEnabled(false);
+        Timer buttonTimer = new Timer();
+        buttonTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        nav_item2.setEnabled(true);
+                    }
+                });
+            }
+        }, 500);
+        return true;
+    }
 
     @Override
     public void proccessFinished(String output) {

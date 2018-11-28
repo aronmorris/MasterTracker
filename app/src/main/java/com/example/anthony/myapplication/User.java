@@ -19,10 +19,22 @@ public class User implements Serializable {
     public User() {
         this.name ="Default";
         this.uname = "Default";
+        avgspeeds = new ArrayList<Double>();
+        durations = new ArrayList<Double>();
+        distances = new ArrayList<Double>();
+        avgspeeds.add(1.00);
+        durations.add(1.00);
+        distances.add(1.00);
     }
     public User( String name, String uname) {
         this.name = name;
         this.uname = uname;
+        avgspeeds = new ArrayList<Double>();
+        durations = new ArrayList<Double>();
+        distances = new ArrayList<Double>();
+        avgspeeds.add(1.00);
+        durations.add(1.00);
+        distances.add(1.00);
     }
 
     public String getName() {
