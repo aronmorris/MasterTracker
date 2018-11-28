@@ -17,12 +17,18 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.series.DataPoint;
+import com.moomeen.endo2java.model.Workout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,AsyncResponse{
 
     private User user=new User();
     private TextView changecreds;
+    private EndomondoWorkoutTask eWtask = new EndomondoWorkoutTask();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,8 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         Intent i = getIntent();
         user=(User)i.getSerializableExtra("User");
         changecreds = (TextView)findViewById(R.id.textView3);
+        eWtask.delegate=this;
+        eWtask.execute(user.getEndomodoname(),user.getEndomondopass());
 
         changecreds.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +109,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         int id = item.getItemId();
 
         if (id == R.id.nav_stats) {
+
             Intent intent = new Intent(Main2Activity.this, StatsActivity.class);
             intent.putExtra("User",user);
             startActivity(intent);
@@ -120,4 +129,34 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
     }
 
 
+    @Override
+    public void proccessFinished(String output) {
+
+    }
+
+    @Override
+    public void proccessFinished(List<Workout> workouts) {
+        ArrayList<Double> avgspeeds=new ArrayList();
+        ArrayList<Double> durations=new ArrayList();
+        ArrayList<Double> distances=new ArrayList();
+
+        for (Workout witer: workouts){
+            durations.add((double)witer.getDuration().getStandardMinutes());
+            distances.add(witer.getDistance());
+            avgspeeds.add(witer.getSpeedAvg());
+        }
+        user.setDurations(durations);
+        user.setAvgspeeds(avgspeeds);
+        user.setDistances(distances);
+    }
+
+    @Override
+    public void proccessFinished(boolean islogedin) {
+
+    }
+
+    @Override
+    public void proccessFinished(DataPoint[] dP) {
+
+    }
 }

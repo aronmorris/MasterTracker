@@ -12,12 +12,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.series.DataPoint;
 import com.moomeen.endo2java.EndomondoSession;
 import com.moomeen.endo2java.error.InvocationException;
 import com.moomeen.endo2java.error.LoginException;
 import com.moomeen.endo2java.model.Workout;
 
+import java.net.ConnectException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class EndoLoginScreen extends AppCompatActivity implements AsyncResponse{
 
@@ -45,12 +48,7 @@ public class EndoLoginScreen extends AppCompatActivity implements AsyncResponse{
                 User u1=(User)i.getSerializableExtra("User");
                 email = Email2.getText().toString();
                 password = Password2.getText().toString();
-                Intent intent =new Intent(EndoLoginScreen.this, Main2Activity.class);
-                finish();
-                u1.setEndomodoname(email);
-                u1.setEndomondopass(password);
-                intent.putExtra("User",u1);
-                startActivity(intent);
+                validate(email,password,u1);
                 //validate(Email2.getText().toString(), Password2.getText().toString());
                 //new BackgroundTask().execute(Email2.getText().toString(), Password2.getText().toString());
                 //eVC.execute(email,password);
@@ -60,15 +58,22 @@ public class EndoLoginScreen extends AppCompatActivity implements AsyncResponse{
 
     }
 
-    private void validate(Boolean res)  {
-        if(res){
+    private void validate(String user,String pas,User u1)  {
+       boolean loggedIn=false;
+        try {
+           loggedIn = new EndomondoValidCredentials().execute(user, pas).get();
+       }catch(InterruptedException e){
+           e.printStackTrace();
+       }catch (ExecutionException e){
+           e.printStackTrace();
+       }
+
+        if(loggedIn){
             Intent intent =new Intent(EndoLoginScreen.this, Main2Activity.class);
-            finish();//addded finish before starting new page to close the current page before moving on so back button doesn't go through unnecessary pages
-
-
-            intent.putExtra("email",email);
-            intent.putExtra("password",password);
-
+            finish();
+            u1.setEndomodoname(email);
+            u1.setEndomondopass(password);
+            intent.putExtra("User",u1);
             startActivity(intent);
         }
 
@@ -98,6 +103,11 @@ public class EndoLoginScreen extends AppCompatActivity implements AsyncResponse{
 
     @Override
     public void proccessFinished(boolean islogedin) {
+
+    }
+
+    @Override
+    public void proccessFinished(DataPoint[] dP) {
 
     }
 

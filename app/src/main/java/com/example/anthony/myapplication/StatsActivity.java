@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -32,20 +33,23 @@ import com.moomeen.endo2java.model.Workout;
 import javax.xml.datatype.Duration;
 
 public class StatsActivity extends Activity implements AsyncResponse{
+
     private TextView Ename;/**for endomondo name, this is temporary/for testing purposes**/
     private TextView Average;
-    private EndomondoWorkoutTask eWtask = new EndomondoWorkoutTask();
+    //private EndomondoWorkoutTask eWtask = new EndomondoWorkoutTask();
     private EndomondoAccountTask eATask = new EndomondoAccountTask();
+    //private MovingAverageClac mavgclac = new MovingAverageClac();
     //private static final String EMAIL = "bobendo354@gmail.com";
     //private static final String PASSWORD = "concordia354";
     //private List<Workout> workouts;
-    private ArrayList<Double> avgspeeds =new ArrayList();
+    /*private ArrayList<Double> avgspeeds=new ArrayList();
     private ArrayList<Double> durations=new ArrayList();
-    private ArrayList<Double> distances=new ArrayList();
+    private ArrayList<Double> distances=new ArrayList();*/
     private LineGraphSeries<DataPoint> series;
     private LineGraphSeries<DataPoint> series2;
     private LineGraphSeries<DataPoint> series3;
     private LineGraphSeries<DataPoint> avgLine;
+    private LineGraphSeries<DataPoint> movingAvg;
     ListView lv;
 
     private User user=new User();
@@ -60,10 +64,10 @@ public class StatsActivity extends Activity implements AsyncResponse{
         //pass the string from begining....
         Ename = (TextView)findViewById(R.id.textView5);
         Average = (TextView)findViewById(R.id.textView_Average);
-        eWtask.delegate=this;
         eATask.delegate=this;
-        eWtask.execute(user.getEndomodoname(),user.getEndomondopass());
         eATask.execute(user.getEndomodoname(),user.getEndomondopass());
+
+
 
 
         //map to XML
@@ -78,7 +82,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
         lv.setAdapter(adapter);
         /**Disable the button outright
          * then delay its activation by 3 seconds**/
-        lv.setEnabled(false);
+       /* lv.setEnabled(false);
         Timer buttonTimer = new Timer();
         buttonTimer.schedule(new TimerTask() {
 
@@ -93,7 +97,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
                 });
             }
         }, 3000);
-
+*/
         /**the on click listener for the listview
          * check to see which item in the list view is clicked
          * gives int i for the specific item clicked
@@ -106,8 +110,9 @@ public class StatsActivity extends Activity implements AsyncResponse{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i==0){
                     if(lv.getChildAt(0).isEnabled()){
-                        double avgspeed = getAverage(avgspeeds);
+                        double avgspeed = getAverage(user.getAvgspeeds());
                         DataPoint[] speedvalues = generateSpeedData();
+                        DataPoint[] movingAverage=getMovingAverage(user.getAvgspeeds());
                         GraphView graph=(GraphView) findViewById(R.id.graph);
                         graph.removeAllSeries();
                         GridLabelRenderer gridLabeX = graph.getGridLabelRenderer();
@@ -118,12 +123,9 @@ public class StatsActivity extends Activity implements AsyncResponse{
                         series.setDataPointsRadius(10);
                         series.setThickness(8);
                         series.setTitle("Average Speed (KM/h)");
-                        avgLine = new LineGraphSeries<>(new DataPoint[] {
-                                new DataPoint(0, avgspeed),
-                                new DataPoint(speedvalues.length, avgspeed)
-                        });
+                        movingAvg = new LineGraphSeries<>(movingAverage);
                         graph.addSeries(series);
-                        graph.addSeries(avgLine);
+                        graph.addSeries(movingAvg);
                         graph.getViewport().setScalableY(true);
                         graph.getViewport().setScalable(true);
                         gridLabeX.setHorizontalAxisTitle("Sessions");
@@ -136,8 +138,9 @@ public class StatsActivity extends Activity implements AsyncResponse{
 
                 }else if (i==1){
                     if(lv.getChildAt(2).isEnabled()) {
-                        double avgDuration = getAverage(durations);
+                        double avgDuration = getAverage(user.getDurations());
                         DataPoint[] durationValues = generateDurationData();
+                        DataPoint[] movingAverage=getMovingAverage(user.getDurations());
                         GraphView graph = (GraphView) findViewById(R.id.graph);
                         graph.removeAllSeries();
                         GridLabelRenderer gridLabeX = graph.getGridLabelRenderer();
@@ -148,12 +151,9 @@ public class StatsActivity extends Activity implements AsyncResponse{
                         series3.setDataPointsRadius(10);
                         series3.setThickness(4);
                         series3.setTitle("Duration (min)");
-                        avgLine = new LineGraphSeries<>(new DataPoint[] {
-                                new DataPoint(0, avgDuration),
-                                new DataPoint(durationValues.length, avgDuration)
-                        });
+                        movingAvg = new LineGraphSeries<>(movingAverage);
                         graph.addSeries(series3);
-                        graph.addSeries(avgLine);
+                        graph.addSeries(movingAvg);
                         graph.getViewport().setScalableY(true);
                         graph.getViewport().setScalable(true);
                         gridLabeX.setHorizontalAxisTitle("Sessions");
@@ -167,8 +167,9 @@ public class StatsActivity extends Activity implements AsyncResponse{
 
                 }else if(i==2){
                     if(lv.getChildAt(2).isEnabled()){
-                        double avgDistance = getAverage(distances);
+                        double avgDistance = getAverage(user.getDistances());
                         DataPoint[] distanceValues = generateDistanceData();
+                        DataPoint[] movingAverage=getMovingAverage(user.getDistances());
                         GraphView graph=(GraphView) findViewById(R.id.graph);
                         graph.removeAllSeries();
                         GridLabelRenderer gridLabeX = graph.getGridLabelRenderer();
@@ -179,12 +180,9 @@ public class StatsActivity extends Activity implements AsyncResponse{
                         series2.setDataPointsRadius(10);
                         series2.setThickness(4);
                         series2.setTitle("Distance (KM)");
-                        avgLine = new LineGraphSeries<>(new DataPoint[] {
-                                new DataPoint(0, avgDistance),
-                                new DataPoint(distanceValues.length, avgDistance)
-                        });
+                        movingAvg = new LineGraphSeries<>(movingAverage);
                         graph.addSeries(series2);
-                        graph.addSeries(avgLine);
+                        graph.addSeries(movingAvg);
                         graph.getViewport().setScalableY(true);
                         graph.getViewport().setScalable(true);
                         gridLabeX.setHorizontalAxisTitle("Sessions");
@@ -211,11 +209,11 @@ public class StatsActivity extends Activity implements AsyncResponse{
     @Override
     public void proccessFinished(List<Workout> workouts) {
 
-        for (Workout witer: workouts){
+        /*for (Workout witer: workouts){
             durations.add((double)witer.getDuration().getStandardMinutes());
             distances.add(witer.getDistance());
             avgspeeds.add(witer.getSpeedAvg());
-        }
+        }*/
 
     }
 
@@ -223,6 +221,15 @@ public class StatsActivity extends Activity implements AsyncResponse{
     public void proccessFinished(boolean islogedin) {
 
     }
+
+    @Override
+    public void proccessFinished(DataPoint[] dP) {
+
+        movingAvg = new LineGraphSeries<>(dP);
+
+    }
+
+
     private double getAverage(ArrayList<Double> data){
         double average=0;
         for (int i = 0; i<data.size();i++){
@@ -232,33 +239,45 @@ public class StatsActivity extends Activity implements AsyncResponse{
 
         return average;
     }
+    private DataPoint[] getMovingAverage(ArrayList<Double> data){
+        double average=0;
+
+        DataPoint[] values = new DataPoint[data.size()];
+        for (int i = 0;i<data.size();i++){
+            average+=data.get(i);
+            DataPoint v = new DataPoint(i,average/(i+1));
+            values[i]= v;
+        }
+
+        return values;
+    }
 
     private DataPoint[] generateSpeedData(){
-        int count=avgspeeds.size();
+        int count=user.getAvgspeeds().size();
         DataPoint[] values = new DataPoint[count];
 
         for (int i=0;i<count;i++){
-            DataPoint v = new DataPoint(i,avgspeeds.get(i));
+            DataPoint v = new DataPoint(i,user.getAvgspeeds().get(i));
             values[i]=v;
         }
         return values;
     }
     private DataPoint[] generateDistanceData(){
-        int count=distances.size();
+        int count=user.getDistances().size();
         DataPoint[] values = new DataPoint[count];
 
         for (int i=0;i<count;i++){
-            DataPoint v = new DataPoint(i,distances.get(i));
+            DataPoint v = new DataPoint(i,user.getDistances().get(i));
             values[i]=v;
         }
         return values;
     }
     private DataPoint[] generateDurationData(){
-        int count = durations.size();
+        int count = user.getDurations().size();
         DataPoint[] values = new DataPoint[count];
 
         for (int i=0;i<count;i++){
-            DataPoint v = new DataPoint(i,durations.get(i));
+            DataPoint v = new DataPoint(i,user.getDurations().get(i));
             values[i]=v;
 
         }
