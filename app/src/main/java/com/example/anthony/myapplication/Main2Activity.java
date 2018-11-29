@@ -120,6 +120,9 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.nav_weather) {
             Intent intent = new Intent(Main2Activity.this, WeatherActivity.class);
             startActivity(intent);
+        } else if (id == R.id.nav_graph){
+            Intent intent = new Intent(Main2Activity.this, Graph.class);
+            startActivity(intent);
         } else if (id == R.id.nav_predic) {
             Intent intent = new Intent(Main2Activity.this, PredictActivity.class);
             intent.putExtra("User",user);
