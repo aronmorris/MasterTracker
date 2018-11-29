@@ -16,18 +16,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
-import com.moomeen.endo2java.EndomondoSession;
-import com.moomeen.endo2java.error.InvocationException;
-import com.moomeen.endo2java.error.LoginException;
-import com.moomeen.endo2java.model.AccountInfo;
 
+import com.jjoe64.graphview.series.DataPoint;
+import com.moomeen.endo2java.model.Workout;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private String email;
-    private String password;
+
+public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,AsyncResponse{
+
     private User user=new User();
-
+    private TextView changecreds;
+    private EndomondoWorkoutTask eWtask = new EndomondoWorkoutTask();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +41,19 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         setSupportActionBar(toolbar);
         Intent i = getIntent();
         user=(User)i.getSerializableExtra("User");
+        changecreds = (TextView)findViewById(R.id.textView3);
+        eWtask.delegate=this;
+        eWtask.execute(user.getEndomodoname(),user.getEndomondopass());
 
-
-
+        changecreds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i2=new Intent(Main2Activity.this, EndoLoginScreen.class);
+                i2.putExtra("User",user);
+                finish();
+                startActivity(i2);
+            }
+        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -72,6 +85,8 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main2, menu);
+
+
         return true;
     }
 
@@ -95,6 +110,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_stats) {
@@ -106,9 +122,12 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
             startActivity(intent);
         } else if (id == R.id.nav_predic) {
             Intent intent = new Intent(Main2Activity.this, PredictActivity.class);
+            intent.putExtra("User",user);
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
-
+            Intent intent = new Intent(Main2Activity.this, MainActivity.class);
+            finish();
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -116,5 +135,63 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu (Menu menu) {
 
+        NavigationView navigationView= findViewById(R.id.nav_view);
+
+        Menu menuNav=navigationView.getMenu();
+        final MenuItem nav_item2 = menuNav.findItem(R.id.nav_stats);
+
+        /**Disable the button outright
+        * then delay its activation by 3 seconds**/
+        nav_item2.setEnabled(false);
+        nav_item2.setEnabled(false);
+        Timer buttonTimer = new Timer();
+        buttonTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        nav_item2.setEnabled(true);
+                    }
+                });
+            }
+        }, 2000);
+        return true;
+    }
+
+    @Override
+    public void proccessFinished(String output) {
+
+    }
+
+    @Override
+    public void proccessFinished(List<Workout> workouts) {
+        ArrayList<Double> avgspeeds=new ArrayList();
+        ArrayList<Double> durations=new ArrayList();
+        ArrayList<Double> distances=new ArrayList();
+
+        for (Workout witer: workouts){
+            durations.add((double)witer.getDuration().getStandardMinutes());
+            distances.add(witer.getDistance());
+            avgspeeds.add(witer.getSpeedAvg());
+        }
+        user.setDurations(durations);
+        user.setAvgspeeds(avgspeeds);
+        user.setDistances(distances);
+    }
+
+    @Override
+    public void proccessFinished(boolean islogedin) {
+
+    }
+
+    @Override
+    public void proccessFinished(DataPoint[] dP) {
+
+    }
 }

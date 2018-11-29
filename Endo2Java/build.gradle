@@ -29,7 +29,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.osgi/org.osgi.core
     compile group: 'org.osgi', name: 'org.osgi.core', version: '6.0.0'
 
-    compile (group: 'org.glassfish.jersey.core', name: 'jersey-client', version:'2.12'){
+    compile (group: 'org.glassfish.jersey.core', name: 'jersey-client', version:'2.16'){
         exclude (group:'javax.inject', module:'javax.inject')
     }
     compile group: 'joda-time', name: 'joda-time', version:'2.3'

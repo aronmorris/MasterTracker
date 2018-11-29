@@ -1,6 +1,7 @@
 package com.example.anthony.myapplication;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class User implements Serializable {
 
@@ -10,15 +11,30 @@ public class User implements Serializable {
     private String pass;
     private String endomodoname;
     private String endomondopass;
+    private ArrayList<Double> avgspeeds;
+    private ArrayList<Double> durations;
+    private ArrayList<Double> distances;
 
 
     public User() {
         this.name ="Default";
         this.uname = "Default";
+        avgspeeds = new ArrayList<Double>();
+        durations = new ArrayList<Double>();
+        distances = new ArrayList<Double>();
+        avgspeeds.add(1.00);
+        durations.add(1.00);
+        distances.add(1.00);
     }
     public User( String name, String uname) {
         this.name = name;
         this.uname = uname;
+        avgspeeds = new ArrayList<Double>();
+        durations = new ArrayList<Double>();
+        distances = new ArrayList<Double>();
+        avgspeeds.add(1.00);
+        durations.add(1.00);
+        distances.add(1.00);
     }
 
     public String getName() {
@@ -55,6 +71,29 @@ public class User implements Serializable {
 
     public void setEndomondopass(String endomondopass) {
         this.endomondopass = endomondopass;
+    }
+    public ArrayList<Double> getAvgspeeds() {
+        return avgspeeds;
+    }
+
+    public void setAvgspeeds(ArrayList<Double> avgspeeds) {
+        this.avgspeeds = avgspeeds;
+    }
+
+    public ArrayList<Double> getDurations() {
+        return durations;
+    }
+
+    public void setDurations(ArrayList<Double> durations) {
+        this.durations = durations;
+    }
+
+    public ArrayList<Double> getDistances() {
+        return distances;
+    }
+
+    public void setDistances(ArrayList<Double> distances) {
+        this.distances = distances;
     }
 
 
