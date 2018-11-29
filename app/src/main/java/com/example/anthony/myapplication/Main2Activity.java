@@ -122,9 +122,12 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
             startActivity(intent);
         } else if (id == R.id.nav_predic) {
             Intent intent = new Intent(Main2Activity.this, PredictActivity.class);
+            intent.putExtra("User",user);
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
-
+            Intent intent = new Intent(Main2Activity.this, MainActivity.class);
+            finish();
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -139,8 +142,10 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
 
         Menu menuNav=navigationView.getMenu();
         final MenuItem nav_item2 = menuNav.findItem(R.id.nav_stats);
-        nav_item2.setEnabled(false);
 
+        /**Disable the button outright
+        * then delay its activation by 3 seconds**/
+        nav_item2.setEnabled(false);
         nav_item2.setEnabled(false);
         Timer buttonTimer = new Timer();
         buttonTimer.schedule(new TimerTask() {
@@ -155,7 +160,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
                     }
                 });
             }
-        }, 500);
+        }, 2000);
         return true;
     }
 
