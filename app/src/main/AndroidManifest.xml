@@ -25,6 +25,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".StatsActivity" />
         <activity android:name=".WeatherActivity" />
+        <activity android:name=".Graph"/>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
