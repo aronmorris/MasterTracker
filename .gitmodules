@@ -1,0 +1,3 @@
+[submodule "weatherDeliverable"]
+	path = weatherDeliverable
+	url = https://github.com/KhaledAylii/weatherDeliverable
