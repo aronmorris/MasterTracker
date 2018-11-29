@@ -45,22 +45,22 @@ public class Graph extends AppCompatActivity {
         graph.addSeries(series);*/
 
      final  Spinner spinner = (Spinner) findViewById(R.id.spinner);
-// Create an ArrayAdapter using the string array and a default spinner layout
+        // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.month_choice, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
+        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
+        // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
 
     final Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
-// Create an ArrayAdapter using the string array and a default spinner layout
+        // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
                 R.array.graph_choice, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
+        // Specify the layout to use when the list of choices appears
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
+        // Apply the adapter to the spinner
         spinner2.setAdapter(adapter2);
 
         final Button button = findViewById(R.id.button_id);
@@ -73,6 +73,10 @@ public class Graph extends AppCompatActivity {
                 String y = ((Spinner)findViewById(R.id.spinner2)).getSelectedItem().toString();
                 //Toast.makeText(getApplicationContext(),"we here tho" + x, Toast.LENGTH_LONG).show();
                 Log.d("String x " ,x + " String y " + y);
+
+                GraphView graph;
+                graph = (GraphView) findViewById(R.id.graph);
+                graph.removeAllSeries();
                 get_json(x,y);
 
 
@@ -83,9 +87,10 @@ public class Graph extends AppCompatActivity {
     }
 
 
-    ArrayList<Integer> date = new ArrayList<>();
-    ArrayList<Integer> y_choice = new ArrayList<>();
+
     public void get_json(String x, String y) {
+        ArrayList<Integer> date = new ArrayList<>();
+        ArrayList<Integer> y_choice = new ArrayList<>();
         String json;
 
         try {
@@ -107,7 +112,7 @@ public class Graph extends AppCompatActivity {
                     date.add(obj.getInt("Day"));
                     y_choice.add(obj.getInt(y));
 
-//Ookok so basically, I need user input to choose what the x values need to be and what the y values need to be...
+                //Ookok so basically, I need user input to choose what the x values need to be and what the y values need to be...
                 }
             }
 
@@ -117,19 +122,22 @@ public class Graph extends AppCompatActivity {
 
             GraphView graph;
             graph = (GraphView) findViewById(R.id.graph);
-            graph.removeAllSeries();
+            //graph.removeAllSeries();
 
            //  int[] y = {0,1,2,3,4,5,6,7,8,9,10};
-            DataPoint[] dp = new DataPoint[x_axis.length];
+            List<DataPoint> dp = new ArrayList<DataPoint>();
+            //DataPoint[] dp = new DataPoint[x_axis.length];
 
             for(int i = 0;i < x_axis.length; i++){
-                dp[i] = new DataPoint(x_axis[i], y_axis[i]);
+                dp.add(new DataPoint(x_axis[i], y_axis[i]));
                 Log.d("Creation", x_axis[i] + "");
             }
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(
+                    dp.toArray(new DataPoint[0])
+            );
 
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dp);
 
-        graph.addSeries(series);
+            graph.addSeries(series);
 
 
            // Toast.makeText(getApplicationContext(), y_choice.toString(), Toast.LENGTH_LONG).show();
