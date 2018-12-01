@@ -28,7 +28,7 @@ public class EndoLoginScreen extends AppCompatActivity implements AsyncResponse{
     private EditText Password2;
     private TextView Info;
     private Button Login2;
-    private EndomondoSession endoAcc;
+
     private String email;
     private String password;
     private boolean isloggedin=false;

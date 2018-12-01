@@ -1,7 +1,11 @@
 package com.example.anthony.myapplication;
 
+import org.joda.time.DateTime;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class User implements Serializable {
 
@@ -14,6 +18,8 @@ public class User implements Serializable {
     private ArrayList<Double> avgspeeds;
     private ArrayList<Double> durations;
     private ArrayList<Double> distances;
+    private ArrayList<Date> dates;
+    private Calendar calendar = Calendar.getInstance();
 
 
     public User() {
@@ -22,9 +28,12 @@ public class User implements Serializable {
         avgspeeds = new ArrayList<Double>();
         durations = new ArrayList<Double>();
         distances = new ArrayList<Double>();
+        dates = new ArrayList<Date>();
         avgspeeds.add(1.00);
         durations.add(1.00);
         distances.add(1.00);
+        Date d1 = calendar.getTime();
+        dates.add(d1 );
     }
     public User( String name, String uname) {
         this.name = name;
@@ -32,9 +41,12 @@ public class User implements Serializable {
         avgspeeds = new ArrayList<Double>();
         durations = new ArrayList<Double>();
         distances = new ArrayList<Double>();
+        dates = new ArrayList<Date>();
         avgspeeds.add(1.00);
         durations.add(1.00);
         distances.add(1.00);
+        Date d1 = calendar.getTime();
+        dates.add(d1 );
     }
 
     public String getName() {
@@ -97,10 +109,11 @@ public class User implements Serializable {
     }
 
 
+    public ArrayList<Date> getDates() {
+        return dates;
+    }
 
-
-
-
-
-
+    public void setDates(ArrayList<Date> dates) {
+        this.dates = dates;
+    }
 }

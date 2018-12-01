@@ -20,16 +20,22 @@ import android.widget.TextView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.moomeen.endo2java.model.Workout;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,AsyncResponse{
-
+    //private Calendar calendar = Calendar.getInstance();
     private User user=new User();
     private TextView changecreds;
+    private TextView tDates;
     private EndomondoWorkoutTask eWtask = new EndomondoWorkoutTask();
 
     @Override
@@ -42,6 +48,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         Intent i = getIntent();
         user=(User)i.getSerializableExtra("User");
         changecreds = (TextView)findViewById(R.id.textView3);
+        tDates = (TextView)findViewById(R.id.textViewDates);
         eWtask.delegate=this;
         eWtask.execute(user.getEndomodoname(),user.getEndomondopass());
 
@@ -174,18 +181,32 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
 
     @Override
     public void proccessFinished(List<Workout> workouts) {
-        ArrayList<Double> avgspeeds=new ArrayList();
-        ArrayList<Double> durations=new ArrayList();
-        ArrayList<Double> distances=new ArrayList();
+        ArrayList<Double> avgspeeds=new ArrayList<Double>();
+        ArrayList<Double> durations=new ArrayList<Double>();
+        ArrayList<Double> distances=new ArrayList<Double>();
+        ArrayList<Date> dates = new ArrayList<Date>();
 
         for (Workout witer: workouts){
             durations.add((double)witer.getDuration().getStandardMinutes());
             distances.add(witer.getDistance());
             avgspeeds.add(witer.getSpeedAvg());
+            dates.add(witer.getStartTime().toDate());
         }
+
+        //had to reverse the data becasue it takes from newest to oldest
+        //we need oldest to newest
+        Collections.reverse(durations);
         user.setDurations(durations);
+        Collections.reverse(avgspeeds);
         user.setAvgspeeds(avgspeeds);
+        Collections.reverse(distances);
         user.setDistances(distances);
+        Collections.reverse(dates);
+        user.setDates(dates);
+        for(int i = 0; i<user.getDates().size();i++){
+            tDates.append(user.getDates().get(i).toString());
+        }
+
     }
 
     @Override

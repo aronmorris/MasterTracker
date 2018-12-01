@@ -4,14 +4,11 @@ import android.app.Activity;
 
 import android.graphics.Color;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.view.View;
 import android.widget.AdapterView;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,15 +16,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ExecutionException;
 
 import com.jaygoo.widget.OnRangeChangedListener;
 import com.jaygoo.widget.RangeSeekBar;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.moomeen.endo2java.model.Workout;
@@ -182,18 +177,33 @@ public class StatsActivity extends Activity implements AsyncResponse{
 
     }
     private void DisplayGraph(DataPoint[] data,DataPoint[] movingAVG, int whichgraph){
-
+        int numdates = user.getDates().size();
         graph=(GraphView) findViewById(R.id.graph);
         graph.removeAllSeries();
         GridLabelRenderer gridLabeX = graph.getGridLabelRenderer();
         GridLabelRenderer gridLabeY = graph.getGridLabelRenderer();
+
         series =new LineGraphSeries<>(data);
         movingAvg = new LineGraphSeries<>(movingAVG);
         graph.addSeries(series);
         graph.addSeries(movingAvg);
+
+        // set date label formatter
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StatsActivity.this));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(5);
+        graph.getViewport().setMinX(user.getDates().get(0).getTime());
+        graph.getViewport().setMaxX(user.getDates().get(numdates-1).getTime());
+        graph.getViewport().setXAxisBoundsManual(true);
+        // as we use dates as labels, the human rounding to nice readable numbers
+        // is not necessary
+        graph.getGridLabelRenderer().setHumanRounding(false);
+        //series.resetData(data);
+        //movingAvg.resetData(movingAVG);
+
+
         graph.getViewport().setScalableY(true);
         graph.getViewport().setScalable(true);
-        gridLabeX.setHorizontalAxisTitle("Sessions");
+        gridLabeX.setHorizontalAxisTitle("Dates");
         graph.getLegendRenderer().setVisible(true);
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
@@ -238,7 +248,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
         DataPoint[] values = new DataPoint[data.size()];
         for (int i = 0;i<data.size();i++){
             average+=data.get(i);
-            DataPoint v = new DataPoint(i,average/(i+1));
+            DataPoint v = new DataPoint(user.getDates().get(i),average/(i+1));
             values[i]= v;
         }
 
@@ -250,7 +260,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
         DataPoint[] values = new DataPoint[count];
 
         for (int i=0;i<count;i++){
-            DataPoint v = new DataPoint(i,user.getAvgspeeds().get(i));
+            DataPoint v = new DataPoint(user.getDates().get(i),user.getAvgspeeds().get(i));
             values[i]=v;
         }
         return values;
@@ -260,7 +270,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
         DataPoint[] values = new DataPoint[count];
 
         for (int i=0;i<count;i++){
-            DataPoint v = new DataPoint(i,user.getDistances().get(i));
+            DataPoint v = new DataPoint(user.getDates().get(i),user.getDistances().get(i));
             values[i]=v;
         }
         return values;
@@ -270,7 +280,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
         DataPoint[] values = new DataPoint[count];
 
         for (int i=0;i<count;i++){
-            DataPoint v = new DataPoint(i,user.getDurations().get(i));
+            DataPoint v = new DataPoint(user.getDates().get(i),user.getDurations().get(i));
             values[i]=v;
 
         }
