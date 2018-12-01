@@ -9,19 +9,116 @@
 
     <TextView
         android:id="@+id/weatherText"
-        android:layout_width="223dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="81dp"
-        android:layout_marginTop="206dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginBottom="207dp"
+        android:layout_width="313dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="35dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="#FFF"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weatherText8" />
+
+    <TextView
+        android:id="@+id/weatherText7"
+        android:layout_width="313dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="35dp"
         android:text="0"
         android:textAlignment="center"
         android:textColor="#FFF"
         android:textSize="36sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/weatherText8"
+        android:layout_width="324dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="31dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="#FFF"
+        android:textSize="30sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/weatherText2"
+        android:layout_width="347dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="21dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="#FFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weatherText" />
+
+    <TextView
+        android:id="@+id/weatherText3"
+        android:layout_width="348dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="80dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="#FFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weatherText2" />
+
+    <TextView
+        android:id="@+id/weatherText4"
+        android:layout_width="344dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="80dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="#FFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.479"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weatherText3" />
+
+    <TextView
+        android:id="@+id/weatherText6"
+        android:layout_width="331dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="52dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="#FFF"
+        android:textSize="24sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weatherText4"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>
