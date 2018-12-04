@@ -108,23 +108,17 @@ public class Graph extends AppCompatActivity {
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
 
-                if(obj.getString("Month").compareTo(x) == 0) {
+                if(obj.getString("Month").compareTo(x) == 0 ) {
                     date.add(obj.getInt("Day"));
                     y_choice.add(obj.getInt(y));
 
-                //Ookok so basically, I need user input to choose what the x values need to be and what the y values need to be...
-                }
+             }
             }
-
             Integer[] y_axis = y_choice.toArray(new Integer[y_choice.size()]);
             Integer[] x_axis = date.toArray(new Integer[date.size()]);
 
-
             GraphView graph;
             graph = (GraphView) findViewById(R.id.graph);
-            //graph.removeAllSeries();
-
-           //  int[] y = {0,1,2,3,4,5,6,7,8,9,10};
             List<DataPoint> dp = new ArrayList<DataPoint>();
             //DataPoint[] dp = new DataPoint[x_axis.length];
 
