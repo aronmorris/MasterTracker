@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class LocalLoginActivity extends AppCompatActivity {
     private EditText Name;
     private EditText Password;
     private User u1=new User();
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         Register.setOnClickListener(new View.OnClickListener() {//move to the registration form
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent(MainActivity.this, RegisterActivity.class);
+                Intent intent =new Intent(LocalLoginActivity.this, RegisterActivity.class);
                 finish();//addded finish before starting new page to close the current page before moving on so back button doesn't go through unnecessary pages
                 startActivity(intent);
             }
@@ -60,13 +60,13 @@ public class MainActivity extends AppCompatActivity {
         if(userPassword.equals(password)||(userName.equalsIgnoreCase("Admin") && userPassword.equals("1234"))){
             u1.setName(helper.searchName(userName));
             u1.setUname(userName);
-            Intent intent =new Intent(MainActivity.this, EndoLoginScreen.class);
+            Intent intent =new Intent(LocalLoginActivity.this, EndoLoginScreen.class);
             intent.putExtra("User",u1);
             finish();
             startActivity(intent);
         }else{
             failedatt--;//toast is for popups like toast pops out of a toaster
-            Toast errpass = Toast.makeText(MainActivity.this, "Invalid Credentials "+failedatt+" attempts remaining", Toast.LENGTH_SHORT);
+            Toast errpass = Toast.makeText(LocalLoginActivity.this, "Invalid Credentials "+failedatt+" attempts remaining", Toast.LENGTH_SHORT);
             errpass.show();
             if(failedatt==0)
                 Login.setEnabled(false);
