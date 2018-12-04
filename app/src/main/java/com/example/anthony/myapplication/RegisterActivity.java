@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
                         //inserting new user into db
                         helper.insertUser(u);
 
-                        Intent intent =new Intent(RegisterActivity.this, MainActivity.class);
+                        Intent intent =new Intent(RegisterActivity.this, LocalLoginActivity.class);
                         finish();
                         startActivity(intent);
                     }

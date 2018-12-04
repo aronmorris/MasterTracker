@@ -366,10 +366,5 @@ public class StatsActivity extends Activity implements AsyncResponse{
     }
 
 
-    /**
-     * TODO: remove extremeties speed above threshold, distance below threshold
-     *
-     * **/
-
 }
 
