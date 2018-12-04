@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import android.graphics.Color;
 import android.content.Intent;
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 
 import android.view.View;
@@ -11,20 +12,27 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import com.jaygoo.widget.OnRangeChangedListener;
 import com.jaygoo.widget.RangeSeekBar;
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 import com.moomeen.endo2java.model.Workout;
 
 import javax.xml.datatype.Duration;
@@ -39,9 +47,8 @@ public class StatsActivity extends Activity implements AsyncResponse{
     ListView lv;
     private RangeSeekBar rangeSeekBar;
     private GraphView graph;
-
     private User user=new User();
-
+    SimpleDateFormat sd = new SimpleDateFormat("MMMM-dd");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -175,6 +182,8 @@ public class StatsActivity extends Activity implements AsyncResponse{
         });
 
 
+
+
     }
     private void DisplayGraph(DataPoint[] data,DataPoint[] movingAVG, int whichgraph){
         int numdates = user.getDates().size();
@@ -187,16 +196,33 @@ public class StatsActivity extends Activity implements AsyncResponse{
         movingAvg = new LineGraphSeries<>(movingAVG);
         graph.addSeries(series);
         graph.addSeries(movingAvg);
+        movingAvg.setTitle("Moving Average");
+        movingAvg.setColor(Color.MAGENTA);
 
         // set date label formatter
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StatsActivity.this));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(5);
+        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(){
+
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if(isValueX){
+                    return sd.format(new Date((long)value));
+                }else {
+                    return super.formatLabel(value, isValueX);
+                }
+
+            }
+        });
+        //graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StatsActivity.this));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(8);
+        graph.getGridLabelRenderer().setHorizontalLabelsAngle(45);
+        //graph.getGridLabelRenderer().setNumVerticalLabels(13);
         graph.getViewport().setMinX(user.getDates().get(0).getTime());
         graph.getViewport().setMaxX(user.getDates().get(numdates-1).getTime());
         graph.getViewport().setXAxisBoundsManual(true);
         // as we use dates as labels, the human rounding to nice readable numbers
         // is not necessary
-        graph.getGridLabelRenderer().setHumanRounding(false);
+        graph.getGridLabelRenderer().setLabelHorizontalHeight(195);
+        graph.getGridLabelRenderer().setHumanRounding(false, true);
         //series.resetData(data);
         //movingAvg.resetData(movingAVG);
 
@@ -214,6 +240,17 @@ public class StatsActivity extends Activity implements AsyncResponse{
             series.setDataPointsRadius(10);
             series.setThickness(8);
             series.setTitle("Average Speed (KM/h)");
+            series.setOnDataPointTapListener(new OnDataPointTapListener() {
+                @Override
+                public void onTap(Series series, DataPointInterface dataPoint) {
+                    Date d = new Date((long) dataPoint.getX());
+                    SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
+                    String formatted = format1.format(d.getTime());
+                    DecimalFormat var = new DecimalFormat("#.##");
+                    Toast.makeText(StatsActivity.this, formatted +"\n"+ var.format(dataPoint.getY())+"KM/h", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(StatsActivity.this, "Series1: On Data Point clicked: "+dataPoint.getX()+"- "+dataPoint.getY(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }else if(whichgraph == 1){
             gridLabeY.setVerticalAxisTitle("Duration (min)");
             series.setColor(Color.BLUE);
@@ -221,6 +258,17 @@ public class StatsActivity extends Activity implements AsyncResponse{
             series.setDataPointsRadius(10);
             series.setThickness(4);
             series.setTitle("Duration (min)");
+            series.setOnDataPointTapListener(new OnDataPointTapListener() {
+                @Override
+                public void onTap(Series series, DataPointInterface dataPoint) {
+                    Date d = new Date((long) dataPoint.getX());
+                    SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
+                    String formatted = format1.format(d.getTime());
+                    DecimalFormat var = new DecimalFormat("#.##");
+                    Toast.makeText(StatsActivity.this, formatted +"\n"+ var.format(dataPoint.getY())+" Minutes", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(StatsActivity.this, "Series1: On Data Point clicked: "+dataPoint.getX()+"- "+dataPoint.getY(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }else if(whichgraph==2){
             gridLabeY.setVerticalAxisTitle("Distance (KM)");
             series.setColor(Color.GREEN);
@@ -228,6 +276,17 @@ public class StatsActivity extends Activity implements AsyncResponse{
             series.setDataPointsRadius(10);
             series.setThickness(4);
             series.setTitle("Distance (KM)");
+            series.setOnDataPointTapListener(new OnDataPointTapListener() {
+                @Override
+                public void onTap(Series series, DataPointInterface dataPoint) {
+                    Date d = new Date((long) dataPoint.getX());
+                    SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
+                    String formatted = format1.format(d.getTime());
+                    DecimalFormat var = new DecimalFormat("#.##");
+                    Toast.makeText(StatsActivity.this, formatted +"\n"+ var.format(dataPoint.getY())+" KM", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(StatsActivity.this, "Series1: On Data Point clicked: "+dataPoint.getX()+"- "+dataPoint.getY(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
     }
@@ -308,8 +367,8 @@ public class StatsActivity extends Activity implements AsyncResponse{
 
 
     /**
-     * TODO: remove extremeties
-     * TODO: Maybe change sessions to dates eventually
+     * TODO: remove extremeties speed above threshold, distance below threshold
+     *
      * **/
 
 }
