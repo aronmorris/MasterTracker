@@ -60,23 +60,27 @@ public class WeatherActivity extends AppCompatActivity {
                             Double temp_min = main.getDouble("temp_min");
                             Double temp_max = main.getDouble("temp_max");
 
-                            weatherText.setText("Current: " + temp + " °C" );
+                            weatherText.setText("Current: " + temp + " °C");
                             weatherText2.setText("Maximum: " + temp_max + " °C");
-                            weatherText3.setText("Minimum: " + temp_min + " °C" );
+                            weatherText3.setText("Minimum: " + temp_min + " °C");
 
 
                             JSONObject wind = response.getJSONObject("wind");
                             Double wind_speed = wind.getDouble("speed");
 
-                            weatherText4.setText("Wind Speed: " + wind_speed +  " km/hr");
-                            if(wind_speed > 10)
-                            weatherText6.setText("Not ideal conditions for biking!");
+                            weatherText4.setText("Wind Speed: " + wind_speed + " km/hr");
+
+                            JSONObject details = response.getJSONArray("weather").getJSONObject(0);
+                            String description = details.getString("description");
+                            weatherText7.setText(description);
+
+                            if (!tobike(wind_speed, description, temp))
+                                weatherText6.setText("Not ideal conditions for biking!");
                             else
                                 weatherText6.setText("Perfect time to bike! Make a new record!");
 
-                            JSONObject details = response.getJSONArray("weather").getJSONObject(0);
-                            weatherText7.setText(details.getString("description"));
-                        } catch (JSONException e){
+
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
@@ -93,9 +97,22 @@ public class WeatherActivity extends AppCompatActivity {
                 weatherText6.setText(error.getMessage());
 
             }
+
+
         });
 
         q.add(stringRequest);
 
+    }
+
+    public boolean tobike(double wind_speed, String description, double temp) {
+        boolean value = false;
+
+        if (wind_speed > 10 || description.contains("snow") || description.contains("rain") || temp < -20) {
+            value = false;
+        } else {
+            return true;
+        }
+        return value;
     }
 }
