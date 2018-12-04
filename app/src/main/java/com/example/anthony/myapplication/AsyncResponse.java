@@ -16,4 +16,6 @@ public interface AsyncResponse {
 
     void proccessFinished(DataPoint[] dP);
 
+    void proccessFinished(int cor);
+
 }

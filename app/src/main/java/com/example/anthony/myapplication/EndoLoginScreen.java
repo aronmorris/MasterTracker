@@ -111,6 +111,10 @@ public class EndoLoginScreen extends AppCompatActivity implements AsyncResponse{
 
     }
 
+    @Override
+    public void proccessFinished(int cor) {
+
+    }
 }
 
 

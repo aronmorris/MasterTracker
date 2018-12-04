@@ -365,6 +365,9 @@ public class StatsActivity extends Activity implements AsyncResponse{
         movingAvg = new LineGraphSeries<>(dP);
     }
 
+    @Override
+    public void proccessFinished(int cor) {
 
+    }
 }
 
