@@ -24,11 +24,12 @@ import java.util.Date;
 import java.util.List;
 
 public class PredictActivity extends AppCompatActivity implements AsyncResponse{
-    private User user = new User();
+    private User user;
     private GraphView graph;
     private LineGraphSeries<DataPoint> tempSeries;
     private LineGraphSeries<DataPoint> statSeries;
     private TextView corOutput;
+    private TextView dateout;
     CorrelationCalc cocc = new CorrelationCalc();
     SimpleDateFormat sd = new SimpleDateFormat("MMM-dd");
     /**
@@ -42,10 +43,11 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_predict);
         Intent intent = getIntent();
         user = (User)intent.getSerializableExtra("User");
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_predict);
+        dateout = (TextView)findViewById(R.id.textView7);
 
         final Spinner Monthspinner = (Spinner) findViewById(R.id.spinner3_Month);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -84,6 +86,9 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
             Log.d("-------**---*", "Adding stuff");
             weatherDao.insertAll(WeatherDataRetriever.getWeatherArrayFromJsonFile(this));
         }
+        for (int i = 0; i<user.getDates().size();i++){
+            dateout.append(user.getDates().get(i).toString());
+        }
         DataPoint[] speeddata = generateSpeedData();
         DataPoint[] tempData = getTempOnWorkoutDays(weatherDao);
         int month = 9;
@@ -111,9 +116,33 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
         Monthspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                /**
+                 * Trim data points to selected months
+                 *
+                 * **/
                 if(position==0){
 
+                }else if(position==1){
 
+                }else if(position==2){
+
+                }else if(position==3){
+
+                }else if(position==4){
+
+                }else if(position==5){
+
+                }else if(position==6){
+
+                }else if(position==7){
+
+                }else if(position==8){
+
+                }else if(position==9){
+
+                }else if(position==10){
+
+                }else if(position==11){
 
                 }
             }
@@ -128,7 +157,15 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
         weatherDataChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // your code here
+                if(position==0){
+
+                }else if(position==1){
+
+                }else if(position==2){
+
+                }else if(position==3){
+
+                }
             }
 
             @Override
@@ -141,7 +178,13 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
         activityChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // your code here
+                if(position==0){
+
+                }else if(position==1){
+
+                }else if(position==2){
+
+                }
             }
 
             @Override
@@ -150,6 +193,28 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
             }
 
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -167,7 +232,10 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
         for (int i =0;i<workoutDays.size();i++){
             month = Integer.parseInt(monthForm.format(workoutDays.get(i)));
             day =Integer.parseInt(dayForm.format(workoutDays.get(i)));
-            temp = weatherdao.findByDate(2018, month, day ).getMeanTemp();
+            Weather wd = weatherdao.findByDate(2018, month, day );
+            //temp = wd.getMeanTemp();
+            if (wd != null)
+                temp = wd.getMeanTemp();
             dps[i] = new DataPoint(workoutDays.get(i),temp);
         }
         //Integer[] y_axisTemp = y_temp.toArray(new Integer[y_temp.size()]);
