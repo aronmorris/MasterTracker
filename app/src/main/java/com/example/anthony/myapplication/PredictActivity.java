@@ -4,6 +4,8 @@ package com.example.anthony.myapplication;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -12,11 +14,19 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PredictActivity extends AppCompatActivity {
     private User user = new User();
-
+    /**
+     * TODO display selected weather data and sport data on same graph
+     * TODO make some kind of correlation between the data
+     * ex:
+     * avgspeed vs windspeed & temp
+     * duration vs windspeed & temp
+     * distance vs windspeed & temp
+     * **/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +62,47 @@ public class PredictActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         spinner3.setAdapter(adapter_endomondo);
 
-        /**
-         * TODO display selected weather data and sport data on same graph
-         * TODO make some kind of correlation between the data
-         * ex:
-         * avgspeed vs windspeed & temp
-         * duration vs windspeed & temp
-         * distance vs windspeed & temp
-         * **/
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if(position==8){
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
+        spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
 
         AppDatabase db = AppDatabase.getDatabase(this);
         WeatherDao weatherDao = db.weatherDao();
@@ -91,5 +134,19 @@ public class PredictActivity extends AppCompatActivity {
 
 
     }
+
+    private Integer[] getWeatherOnWorkoutDays(){
+        ArrayList<Date> workoutDays = user.getDates();
+        Integer[] workoutDayTemp = new Integer[10];
+        /**
+         * TODO finish
+         * **/
+        for (int i =0;i<workoutDays.size();i++){
+
+        }
+
+        return workoutDayTemp;
+    }
+
 }
 

@@ -48,7 +48,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
     private RangeSeekBar rangeSeekBar;
     private GraphView graph;
     private User user=new User();
-    SimpleDateFormat sd = new SimpleDateFormat("MMMM-dd");
+    SimpleDateFormat sd = new SimpleDateFormat("MMM-dd");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -221,7 +221,7 @@ public class StatsActivity extends Activity implements AsyncResponse{
         graph.getViewport().setXAxisBoundsManual(true);
         // as we use dates as labels, the human rounding to nice readable numbers
         // is not necessary
-        graph.getGridLabelRenderer().setLabelHorizontalHeight(195);
+        graph.getGridLabelRenderer().setLabelHorizontalHeight(110);
         graph.getGridLabelRenderer().setHumanRounding(false, true);
         //series.resetData(data);
         //movingAvg.resetData(movingAVG);

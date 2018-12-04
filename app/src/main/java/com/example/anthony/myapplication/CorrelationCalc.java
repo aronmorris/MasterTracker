@@ -24,6 +24,11 @@ public class CorrelationCalc extends AsyncTask<ArrayList<Double>,Void,Integer> {
     private Double sumofd1sqr=0.0;
     private Double sumofd2sqr=0.0;
 
+    /**
+     *
+     * TODO NEEDS TO BE CHANGED TO INTEGERS
+     *
+     * **/
     @Override
     protected Integer doInBackground(ArrayList<Double>... arrayLists) {
         /**
