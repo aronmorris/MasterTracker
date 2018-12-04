@@ -19,6 +19,14 @@ public class PredictActivity extends AppCompatActivity {
         setContentView(R.layout.activity_predict);
         Intent intent = getIntent();
         user = (User)intent.getSerializableExtra("User");
+        /**
+         * TODO display selected weather data and sport data on same graph
+         * TODO make some kind of correlation between the data
+         * ex:
+         * avgspeed vs windspeed & temp
+         * duration vs windspeed & temp
+         * distance vs windspeed & temp
+         * **/
 
 
 
