@@ -10,6 +10,9 @@
     <string name="User_Name">UserName</string>
     <string name="Client_Name">Your Name</string>
     <string name="User_Pass">Password</string>
+    <string name="Temp_Stats">Temperature Statistic</string>>
+    <string name="Endomondo_Stat">Endomondo Statistic</string>
+    <string name= "Month">Month</string>
     <string name="Conf_Pass">Confirm Password</string>
     <string name="Login_Button">Login</string>
     <string name="Register_Button">Register</string>
