@@ -1,10 +1,13 @@
 package com.example.anthony.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collections;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,9 +25,12 @@ public class WeatherActivity extends AppCompatActivity {
 
     private TextView weatherText, weatherText2, weatherText3, weatherText4, weatherText8, weatherText6, weatherText7;
     final private String weatherURL = "http://api.openweathermap.org/data/2.5/weather?q=montreal&units=metric&appId=9a0db6c8d2081bbedd23fa9290db341b";
-
+    private User user=new User();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent = getIntent();
+        user = (User)intent.getSerializableExtra("User");
+        final double best_distance = getAverage(user.getDurations());
 
         // Testing DB
         AppDatabase db = AppDatabase.getDatabase(this);
@@ -35,6 +41,7 @@ public class WeatherActivity extends AppCompatActivity {
             Log.d("*-*-*-*-*-*-*-**-*--*", "Adding stuff");
             weatherDao.insertAll(WeatherDataRetriever.getWeatherArrayFromJsonFile(this));
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
 
@@ -77,7 +84,7 @@ public class WeatherActivity extends AppCompatActivity {
                             if (!tobike(wind_speed, description, temp))
                                 weatherText6.setText("Not ideal conditions for biking!");
                             else
-                                weatherText6.setText("Perfect time to bike! Make a new record!");
+                                weatherText6.setText("Perfect time to bike! Make a new record!\n " + Math.round(best_distance) + " km");
 
 
                         } catch (JSONException e) {
@@ -108,11 +115,20 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean tobike(double wind_speed, String description, double temp) {
         boolean value = false;
 
-        if (wind_speed > 10 || description.contains("snow") || description.contains("rain") || temp < -20) {
+        if (wind_speed > 10 || description.contains("snow") || description.contains("rain") || description.contains("heavy") || temp < -20) {
             value = false;
-        } else {
-            return true;
-        }
+        } else
+            value = true;
+
         return value;
+    }
+    private double getAverage(ArrayList<Double> data){
+        double average=0;
+        for (int i = 0; i<data.size();i++){
+            average += data.get(i);
+        }
+        average = average/data.size();
+
+        return average;
     }
 }
