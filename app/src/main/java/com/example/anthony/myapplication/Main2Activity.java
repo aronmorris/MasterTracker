@@ -213,4 +213,9 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
     public void proccessFinished(DataPoint[] dP) {
 
     }
+
+    @Override
+    public void proccessFinished(int cor) {
+
+    }
 }
