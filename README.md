@@ -1,36 +1,36 @@
 Project name: MasterTracker
 Application specification: A mobile app that extract data  ( for this project, data for cycling workout) and display data graphically.
 
+How Setup and run the application and Username, password required:
+Local login:  
+Username:Admin
+Password:1234
+Endomondo Loging: 
+Username: comp354_2018@yahoo.com
+Password: Concordia
 
-OUR GOALS:
+How to setup and run the application :
+You can run this android application in Android studio on the laptop or on the android mobile phone.
+To run this android application on the phone, steps below are required:
+Note: you need android version 8.0.0 or higher on your phone.
 
-1. EXTRACT .TCX FILE FROM ENDOMONDO
-2. PARSE TCX INTO XML
-3. DISPLAY CONTENTS
+Step 1) Enable USB debugging 
+The very first step is to enable USB debugging on your Android device. To do this follow these steps
+•	On your phone (or tablet) go to Settings=> About Phone
+•	Tap Build Number 7 times, after 7th time it will say You are now a developer
+You will notice Developer’s Options are now available
+Go to the Developer option and enable USB debugging
 
-Group Project - Deliverable 1.1
+Step 2: Install USB driver 
 
-The name of our mobile app is Master Tracker.
-Application specification: 
-An android app that extract data  ( for this project, data for cycling workout) and display data graphically. We develop the application using android studio.
-
-Data source:
-The data source for our mobile application is Endomondo database . we created an account on endomondo and logged data for cycling(sport) workout.
-The data we create for each cycling workout is date, distance (how many km/mile we did cycling), duration of workout and average rate of heart beat. We will display these data in form of table and graph in first phase of the project.
-We can get data of our workouts one by one from endomondo website in .TCX and .GPX format.
-#####Note: Login Details for Endomondo: bobendo354@gmail.com Password: concordia354
-#####Note: Login2 Endomondo:"adrianna.kousik@gmail.com" Password: "comp354project";
-
-How we obtain data:
-To connect our application to endomondo in order to get cycling workout data, we use an unofficial API called Endo2Java. This unofficial API is a open source API can be found on GitHub with the address (https://github.com/MoOmEeN/endo2java ) and we use this API as a library in our application that give us the functionality of logging into an account already created on endomondo and extract extract the data we need.
-Using this API, we can extract basic data of all the workouts, data of single workout (for this project we only focus on cycling sport) and data of the account we created.
-
-Data schema of the extracted data:
-We extract data from endomondo in .TCX format which is Training Center XML file. 
-Then we parse the .TCX into .XML and read the file, display data and show it graphically. 
-
+Next step is to install USB driver for your Android device. For this follow instructions from your device manufacturer. For example, to use Android smartphone of Sony, so  just downloaded Sony   USB driver from their official website. If your device uses Google USB driver you can download from this link http://developer.android.com/sdk/win-usb.html. After installation you need to update it. Make sure your device is connected through a USB cable.
+ Go to the Control Panel => Device Manager then locate and right click your Android device and click Update driver software. 
  
+Note: Make sure your Android device is not sleeping while connected through USB cable.
 
+Step 3: Run your app 
 
- 
+No you can run your Android app. Right click on the app and click Run. Or simply select run option from the tool bar menu in android studio IDE.
+A window Select Deployment Target will appear, and a list of available devices will appear. Choose your device and click OK. Android Studio will run your application in your Android device.
+
 
