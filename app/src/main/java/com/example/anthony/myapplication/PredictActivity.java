@@ -4,27 +4,32 @@ package com.example.anthony.myapplication;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.moomeen.endo2java.model.Workout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PredictActivity extends AppCompatActivity {
+public class PredictActivity extends AppCompatActivity implements AsyncResponse{
     private User user = new User();
     private GraphView graph;
     private LineGraphSeries<DataPoint> tempSeries;
     private LineGraphSeries<DataPoint> statSeries;
+    private TextView corOutput;
+    CorrelationCalc cocc = new CorrelationCalc();
     SimpleDateFormat sd = new SimpleDateFormat("MMM-dd");
     /**
      * TODO display selected weather data and sport data on same graph
@@ -42,40 +47,45 @@ public class PredictActivity extends AppCompatActivity {
         Intent intent = getIntent();
         user = (User)intent.getSerializableExtra("User");
 
-        final Spinner spinner = (Spinner) findViewById(R.id.spinner3_Month);
+        final Spinner Monthspinner = (Spinner) findViewById(R.id.spinner3_Month);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.month_name_choice, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+        Monthspinner.setAdapter(adapter);
 
-        final Spinner spinner2 = (Spinner) findViewById(R.id.spinner4_TempStat);
+        final Spinner weatherDataChoice = (Spinner) findViewById(R.id.spinner4_TempStat);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter_weather = ArrayAdapter.createFromResource(this,
                 R.array.graph_extra_choice, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        spinner2.setAdapter(adapter_weather);
+        weatherDataChoice.setAdapter(adapter_weather);
 
-        final Spinner spinner3 = (Spinner) findViewById(R.id.spinner5);
+        final Spinner activityChoice = (Spinner) findViewById(R.id.spinner5);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter_endomondo = ArrayAdapter.createFromResource(this,
                 R.array.endomondo_selection, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        spinner3.setAdapter(adapter_endomondo);
+        activityChoice.setAdapter(adapter_endomondo);
 
-
-
+        corOutput = (TextView)findViewById(R.id.TextView_Corr);
 
         AppDatabase db = AppDatabase.getDatabase(this);
-        final WeatherDao weatherDao = db.weatherDao();
+        WeatherDao weatherDao = db.weatherDao();
         weatherDao.deleteAll();
-        //List<Weather> wList = weatherDao.getAll();
+        List<Weather> wList = weatherDao.getAll();
+        if (wList.size() == 0) {
+            Log.d("-------**---*", "Adding stuff");
+            weatherDao.insertAll(WeatherDataRetriever.getWeatherArrayFromJsonFile(this));
+        }
+        DataPoint[] speeddata = generateSpeedData();
+        DataPoint[] tempData = getTempOnWorkoutDays(weatherDao);
         int month = 9;
         int month_size = weatherDao.findByYearMonth(2018, month).size();
         ArrayList<Integer> date = new ArrayList<>();
@@ -96,11 +106,13 @@ public class PredictActivity extends AppCompatActivity {
         Integer[] y_axis2 = y_temp.toArray(new Integer[y_temp.size()]);
         Integer[] x_axis = date.toArray(new Integer[date.size()]);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        cocc.execute(speeddata,tempData);
+
+        Monthspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if(position==0){
-                    
+
 
 
                 }
@@ -113,7 +125,7 @@ public class PredictActivity extends AppCompatActivity {
 
         });
 
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        weatherDataChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
@@ -126,7 +138,7 @@ public class PredictActivity extends AppCompatActivity {
 
         });
 
-        spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        activityChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
@@ -146,32 +158,66 @@ public class PredictActivity extends AppCompatActivity {
 
     private DataPoint[] getTempOnWorkoutDays(WeatherDao weatherdao){
         ArrayList<Date> workoutDays = user.getDates();
-        //Integer[] workoutDayTemp = new Integer[10];
-        //ArrayList<Integer>y_temp = new ArrayList<>();
-        SimpleDateFormat Month = new SimpleDateFormat("MM");
-        SimpleDateFormat Day = new SimpleDateFormat("dd");
+
+        SimpleDateFormat monthForm = new SimpleDateFormat("M");
+        SimpleDateFormat dayForm = new SimpleDateFormat("dd");
         double temp = 0;
+        int month,day;
         DataPoint[] dps = new DataPoint[workoutDays.size()];
         for (int i =0;i<workoutDays.size();i++){
-            temp = weatherdao.findByDate(2018, Integer.parseInt(Month.format(workoutDays.get(i))), Integer.parseInt(Day.format(workoutDays.get(i)))).getMeanTemp();
+            month = Integer.parseInt(monthForm.format(workoutDays.get(i)));
+            day =Integer.parseInt(dayForm.format(workoutDays.get(i)));
+            temp = weatherdao.findByDate(2018, month, day ).getMeanTemp();
             dps[i] = new DataPoint(workoutDays.get(i),temp);
         }
         //Integer[] y_axisTemp = y_temp.toArray(new Integer[y_temp.size()]);
 
         return dps;
     }
+    private DataPoint[] generateSpeedData(){
+        int count=user.getAvgspeeds().size();
+        DataPoint[] values = new DataPoint[count];
+
+        for (int i=0;i<count;i++){
+            DataPoint v = new DataPoint(user.getDates().get(i),user.getAvgspeeds().get(i));
+            values[i]=v;
+        }
+        return values;
+    }
+    private DataPoint[] generateDistanceData(){
+        int count=user.getDistances().size();
+        DataPoint[] values = new DataPoint[count];
+
+        for (int i=0;i<count;i++){
+            DataPoint v = new DataPoint(user.getDates().get(i),user.getDistances().get(i));
+            values[i]=v;
+        }
+        return values;
+    }
+    private DataPoint[] generateDurationData(){
+        int count = user.getDurations().size();
+        DataPoint[] values = new DataPoint[count];
+
+        for (int i=0;i<count;i++){
+            DataPoint v = new DataPoint(user.getDates().get(i),user.getDurations().get(i));
+            values[i]=v;
+
+        }
+        return values;
+    }
+
     private DataPoint[] getWindOnWorkoutDays(WeatherDao weatherdao){
         ArrayList<Date> workoutDays = user.getDates();
         //Integer[] workoutDayTemp = new Integer[10];
         ArrayList<Integer>y_wind = new ArrayList<>();
         SimpleDateFormat Month = new SimpleDateFormat("MM");
         SimpleDateFormat Day = new SimpleDateFormat("dd");
-        double temp = 0;
+        double windspeed = 0;
         DataPoint[] dps = new DataPoint[workoutDays.size()];
         for (int i =0;i<workoutDays.size();i++){
-            temp = weatherdao.findByDate(2018, Integer.parseInt(Month.format(workoutDays.get(i))), Integer.parseInt(Day.format(workoutDays.get(i)))).getWindSpeed();
-            dps[i] = new DataPoint(workoutDays.get(i),temp);
-            y_wind.add((int)temp);
+            windspeed = weatherdao.findByDate(2018, Integer.parseInt(Month.format(workoutDays.get(i))), Integer.parseInt(Day.format(workoutDays.get(i)))).getWindSpeed();
+            dps[i] = new DataPoint(workoutDays.get(i),windspeed);
+            //y_wind.add((int)temp);
         }
         //Integer[] y_axisWind = y_wind.toArray(new Integer[y_wind.size()]);
         return dps;
@@ -224,5 +270,29 @@ public class PredictActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void proccessFinished(String output) {
+
+    }
+
+    @Override
+    public void proccessFinished(List<Workout> workouts) {
+
+    }
+
+    @Override
+    public void proccessFinished(boolean islogedin) {
+
+    }
+
+    @Override
+    public void proccessFinished(DataPoint[] dP) {
+
+    }
+
+    @Override
+    public void proccessFinished(int cor) {
+        corOutput.append(" "+cor);
+    }
 }
 

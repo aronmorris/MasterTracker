@@ -23,6 +23,7 @@
         <item>Distance</item>
         <item>Duration</item>
     </string-array>
+    <string name="Correlation">The Correlation Coefficient is:</string>>
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
