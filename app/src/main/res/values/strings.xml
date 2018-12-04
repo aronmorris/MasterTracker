@@ -18,7 +18,11 @@
     <string name="Register_Button">Register</string>
     <string name="Rego_Form">Registration Form</string>
     <string name="title_activity_settings">Settings</string>
-
+    <string-array name="endomondo_selection">
+        <item>Average Speed</item>
+        <item>Distance</item>
+        <item>Duration</item>
+    </string-array>
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
@@ -98,6 +102,13 @@
         <item>MinTemp_C</item>
     </string-array>
 
+    <string-array name="graph_extra_choice">
+        <item>MeanTemp_C</item>
+        <item>MaxTemp_C</item>
+        <item>MinTemp_C</item>
+        <item>Wind Speed</item>
+    </string-array>
+
     <string name="month">Choose an option</string>
     <string-array name="month_choice">
         <item>4</item>
@@ -110,7 +121,20 @@
         <item>11</item>
         <item>12</item>
     </string-array>
-
+    <string-array name="month_name_choice">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
     <string name="currentWeather">Simple Weather</string>
     <string name="change_city">Change city</string>
 
