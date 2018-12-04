@@ -11,6 +11,9 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PredictActivity extends AppCompatActivity {
     private User user = new User();
 
@@ -57,6 +60,30 @@ public class PredictActivity extends AppCompatActivity {
          * duration vs windspeed & temp
          * distance vs windspeed & temp
          * **/
+
+        AppDatabase db = AppDatabase.getDatabase(this);
+        WeatherDao weatherDao = db.weatherDao();
+        weatherDao.deleteAll();
+        List<Weather> wList = weatherDao.getAll();
+        int month = 9;
+        int month_size = weatherDao.findByYearMonth(2018, month).size();
+        ArrayList<Integer> date = new ArrayList<>();
+        ArrayList<Integer> y_wind = new ArrayList<>();
+        ArrayList<Integer> y_temp = new ArrayList<>();
+
+        for (int i = 0; i < month_size; i++) {
+            date.add(i+1);
+        }
+        for (int i = 0; i < date.size(); i++) {
+            int wind = weatherDao.findByDate(2018, month, date.get(i)).getWindSpeed();
+            double temp = weatherDao.findByDate(2018, month, date.get(i)).getMeanTemp();
+            y_wind.add(wind);
+            y_temp.add((int)temp);
+        }
+
+        Integer[] y_axis1 = y_wind.toArray(new Integer[y_wind.size()]);
+        Integer[] y_axis2 = y_temp.toArray(new Integer[y_temp.size()]);
+        Integer[] x_axis = date.toArray(new Integer[date.size()]);
 
 
 
