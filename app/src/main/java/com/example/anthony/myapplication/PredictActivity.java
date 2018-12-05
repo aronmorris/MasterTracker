@@ -348,8 +348,7 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-                startActivity(getIntent());
+                graph.removeAllSeries();
 
             }
         });
