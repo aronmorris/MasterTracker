@@ -1,4 +1,4 @@
- [
+{"weatherData":[
     {
       "year": 2018,
       "month": 1,
@@ -3398,4 +3398,4 @@
       "windDir": 23,
       "windSpeed": 67
     }
-  ]
+  ]}
