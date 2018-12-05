@@ -28,7 +28,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
     //private Calendar calendar = Calendar.getInstance();
     private User user=new User();
     private TextView changecreds;
-    private TextView tDates;
+
     private EndomondoWorkoutTask eWtask = new EndomondoWorkoutTask();
 
     @Override
@@ -41,7 +41,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         Intent i = getIntent();
         user=(User)i.getSerializableExtra("User");
         changecreds = (TextView)findViewById(R.id.textView3);
-        tDates = (TextView)findViewById(R.id.textViewDates);
+
         eWtask.delegate=this;
         eWtask.execute(user.getEndomodoname(),user.getEndomondopass());
 
@@ -201,9 +201,6 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         user.setDistances(distances);
         Collections.reverse(dates);
         user.setDates(dates);
-        for(int i = 0; i<user.getDates().size();i++){
-            tDates.append(user.getDates().get(i).toString());
-        }
 
     }
 
