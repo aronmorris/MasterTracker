@@ -33,4 +33,5 @@ Step 3: Run your app
 No you can run your Android app. Right click on the app and click Run. Or simply select run option from the tool bar menu in android studio IDE.
 A window Select Deployment Target will appear, and a list of available devices will appear. Choose your device and click OK. Android Studio will run your application in your Android device.
 
+Download the app-debug.apk file on your android phone and run the application.
 
