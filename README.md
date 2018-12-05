@@ -36,7 +36,10 @@ A window Select Deployment Target will appear, and a list of available devices w
 Download the app-debug.apk file on your android phone and run the application.
 
 Important Notes!
+
 -Go through the app slowly, from time to time it will crash if the user goes to different sections of the App too quickly.
+
 -There were some issues accross devices/ emulators. If the app crashes, just open and try again. It does function as advertised.
+
 -In predictions, some Months do not have data to display, try another month and pick a option, spped, distance, max temp ect.
 
