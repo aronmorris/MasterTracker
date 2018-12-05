@@ -145,11 +145,11 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
 
         Menu menuNav=navigationView.getMenu();
         final MenuItem nav_item2 = menuNav.findItem(R.id.nav_stats);
-
+        final MenuItem nav_item3 = menuNav.findItem(R.id.nav_predic);
         /**Disable the button outright
         * then delay its activation by 3 seconds**/
         nav_item2.setEnabled(false);
-        nav_item2.setEnabled(false);
+        nav_item3.setEnabled(false);
         Timer buttonTimer = new Timer();
         buttonTimer.schedule(new TimerTask() {
 
@@ -160,8 +160,11 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
                     @Override
                     public void run() {
                         nav_item2.setEnabled(true);
+                        nav_item3.setEnabled(true);
                     }
                 });
+
+
             }
         }, 2000);
         return true;
