@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import android.widget.Button;
 
 public class PredictActivity extends AppCompatActivity implements AsyncResponse{
     private User user;
@@ -41,6 +42,7 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
     int[] trimmingIndex;
     private DataPoint[] trimedWeatherData;
     private DataPoint[] trimedWorkoutData;
+    private Button reset;
 
     CorrelationCalc cocc = new CorrelationCalc();
     SimpleDateFormat sd = new SimpleDateFormat("MMM-dd");
@@ -340,6 +342,16 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                 // your code here
             }
 
+        });
+
+        reset = (Button)findViewById(R.id.button1);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                startActivity(getIntent());
+
+            }
         });
 
     }
