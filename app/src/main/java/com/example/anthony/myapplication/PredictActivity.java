@@ -2,6 +2,8 @@ package com.example.anthony.myapplication;
 
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.icu.text.DecimalFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +12,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 import com.moomeen.endo2java.model.Workout;
 
 import java.text.SimpleDateFormat;
@@ -29,6 +35,8 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
     private GraphView graph;
     private LineGraphSeries<DataPoint> tempSeries;
     private LineGraphSeries<DataPoint> statSeries;
+    GridLabelRenderer gridLabeX;
+    GridLabelRenderer gridLabeY;
     int[] trimmingIndex;
     private DataPoint[] trimedWeatherData;
     private DataPoint[] trimedWorkoutData;
@@ -79,12 +87,15 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         activityChoice.setAdapter(adapter_endomondo);
-
+        /**
+         *
+         * this is not working for some reason
+         * **/
         corOutput = (TextView)findViewById(R.id.TextView_Corr);
 
         AppDatabase db = AppDatabase.getDatabase(this);
         WeatherDao weatherDao = db.weatherDao();
-        weatherDao.deleteAll();
+        //weatherDao.deleteAll();
         List<Weather> wList = weatherDao.getAll();
         if (wList.size() == 0) {
             Log.d("-------**---*", "Adding stuff");
@@ -93,13 +104,17 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
         for (int i = 0; i<user.getDates().size();i++){
             dateout.append(user.getDates().get(i).toString());
         }
+        graph=(GraphView) findViewById(R.id.graph);
+        gridLabeX = graph.getGridLabelRenderer();
+        gridLabeY = graph.getGridLabelRenderer();
+
         final DataPoint[] speeddata = generateSpeedData();
         final DataPoint[] durationdata=generateDurationData();
         final DataPoint[] distancedata=generateDistanceData();
         final DataPoint[] meanTempData = getMeanTempOnWorkoutDays(weatherDao);
         final DataPoint[] maxTempData = getMaxTempOnWorkoutDays(weatherDao);
         final DataPoint[] minTempData = getMinTempOnWorkoutDays(weatherDao);
-        //DataPoint[] windData = getWindOnWorkoutDays(weatherDao);
+        final DataPoint[] windData = getWindOnWorkoutDays(weatherDao);
 
 
         final int monthSelected;
@@ -156,6 +171,8 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                  *
                  * **/
                 if(position==0){
+
+                    //gridLabeY.setVerticalAxisTitle("Average Speed (KM/h)");
                     try{
                         trimedWeatherData = Arrays.copyOfRange(meanTempData,trimmingIndex[0],trimmingIndex[1]);
                         tempSeries =new LineGraphSeries<>(trimedWeatherData);
@@ -164,9 +181,10 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         tempSeries =new LineGraphSeries<>(meanTempData);
                         displayGraph(meanTempData,1);
                     }
-
+                    tempSeries.setTitle("Mean Temperature C");
 
                 }else if(position==1){
+
                     try{
                         trimedWeatherData = Arrays.copyOfRange(maxTempData,trimmingIndex[0],trimmingIndex[1]);
                         tempSeries =new LineGraphSeries<>(trimedWeatherData);
@@ -175,8 +193,9 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         tempSeries =new LineGraphSeries<>(maxTempData);
                         displayGraph(maxTempData,1);
                     }
-
+                    tempSeries.setTitle("Max Temperature C");
                 }else if(position==2){
+
                     try{
                         trimedWeatherData = Arrays.copyOfRange(minTempData,trimmingIndex[0],trimmingIndex[1]);
                         tempSeries =new LineGraphSeries<>(trimedWeatherData);
@@ -185,9 +204,17 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         tempSeries =new LineGraphSeries<>(minTempData);
                         displayGraph(minTempData,1);
                     }
-
+                    tempSeries.setTitle("Min Temperature C");
                 }else if(position==3){
-
+                    try{
+                        trimedWeatherData = Arrays.copyOfRange(windData,trimmingIndex[0],trimmingIndex[1]);
+                        tempSeries =new LineGraphSeries<>(trimedWeatherData);
+                        displayGraph(trimedWeatherData,1);
+                    }catch(IllegalArgumentException e){
+                        tempSeries =new LineGraphSeries<>(windData);
+                        displayGraph(windData,1);
+                    }
+                    tempSeries.setTitle("Wind Speed (KM/h)");
                 }
             }
 
@@ -205,17 +232,38 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                  * Show workout data
                  * **/
                 if(position==0){
+
+                    gridLabeY.setVerticalAxisTitle("Average Speed (KM/h)");
                     try{
                         trimedWorkoutData = Arrays.copyOfRange(speeddata,trimmingIndex[0],trimmingIndex[1]);
                         statSeries = new LineGraphSeries<>(trimedWorkoutData);
                         displayGraph(trimedWorkoutData,0);
+
                     }catch(IllegalArgumentException e){
                         statSeries = new LineGraphSeries<>(speeddata);
                         displayGraph(speeddata,0);
                     }
+                    statSeries.setTitle("Average Speed (KM/h)");
+                    statSeries.setColor(Color.RED);
+                    statSeries.setDrawDataPoints(true);
+                    statSeries.setDataPointsRadius(10);
+                    statSeries.setThickness(8);
+                    statSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
+                        @Override
+                        public void onTap(Series series, DataPointInterface dataPoint) {
+                            Date d = new Date((long) dataPoint.getX());
+                            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
+                            String formatted = format1.format(d.getTime());
+                            DecimalFormat var = new DecimalFormat("#.##");
+                            Toast.makeText(PredictActivity.this, formatted +"\n"+ var.format(dataPoint.getY())+"KM/h", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(StatsActivity.this, "Series1: On Data Point clicked: "+dataPoint.getX()+"- "+dataPoint.getY(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 
                 }else if(position==1){
+
+                    gridLabeY.setVerticalAxisTitle("Distance (KM)");
                     try{
                         trimedWorkoutData = Arrays.copyOfRange(distancedata,trimmingIndex[0],trimmingIndex[1]);
                         statSeries = new LineGraphSeries<>(trimedWorkoutData);
@@ -224,10 +272,27 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         statSeries = new LineGraphSeries<>(distancedata);
                         displayGraph(distancedata,0);
                     }
-
+                    statSeries.setTitle("Average Speed (KM)");
+                    statSeries.setColor(Color.RED);
+                    statSeries.setDrawDataPoints(true);
+                    statSeries.setDataPointsRadius(10);
+                    statSeries.setThickness(8);
+                    statSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
+                        @Override
+                        public void onTap(Series series, DataPointInterface dataPoint) {
+                            Date d = new Date((long) dataPoint.getX());
+                            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
+                            String formatted = format1.format(d.getTime());
+                            DecimalFormat var = new DecimalFormat("#.##");
+                            Toast.makeText(PredictActivity.this, formatted +"\n"+ var.format(dataPoint.getY())+" KM", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(StatsActivity.this, "Series1: On Data Point clicked: "+dataPoint.getX()+"- "+dataPoint.getY(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 
                 }else if(position==2){
+
+                    gridLabeY.setVerticalAxisTitle("Duration (Minutes)");
                     try{
                         trimedWorkoutData = Arrays.copyOfRange(durationdata,trimmingIndex[0],trimmingIndex[1]);
                         statSeries = new LineGraphSeries<>(trimedWorkoutData);
@@ -236,7 +301,22 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         statSeries = new LineGraphSeries<>(durationdata);
                         displayGraph(durationdata,0);
                     }
-
+                    statSeries.setTitle("Duration (Minutes)");
+                    statSeries.setColor(Color.RED);
+                    statSeries.setDrawDataPoints(true);
+                    statSeries.setDataPointsRadius(10);
+                    statSeries.setThickness(8);
+                    statSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
+                        @Override
+                        public void onTap(Series series, DataPointInterface dataPoint) {
+                            Date d = new Date((long) dataPoint.getX());
+                            SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
+                            String formatted = format1.format(d.getTime());
+                            DecimalFormat var = new DecimalFormat("#.##");
+                            Toast.makeText(PredictActivity.this, formatted +"\n"+ var.format(dataPoint.getY())+" Minutes", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(StatsActivity.this, "Series1: On Data Point clicked: "+dataPoint.getX()+"- "+dataPoint.getY(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
                 }
             }
@@ -370,14 +450,19 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
         ArrayList<Date> workoutDays = user.getDates();
         //Integer[] workoutDayTemp = new Integer[10];
         ArrayList<Integer>y_wind = new ArrayList<>();
-        SimpleDateFormat Month = new SimpleDateFormat("MM");
-        SimpleDateFormat Day = new SimpleDateFormat("dd");
+        SimpleDateFormat monthForm = new SimpleDateFormat("MM");
+        SimpleDateFormat dayForm = new SimpleDateFormat("dd");
         double windspeed = 0;
+        int month,day;
         DataPoint[] dps = new DataPoint[workoutDays.size()];
         for (int i =0;i<workoutDays.size();i++){
-            windspeed = weatherdao.findByDate(2018, Integer.parseInt(Month.format(workoutDays.get(i))), Integer.parseInt(Day.format(workoutDays.get(i)))).getWindSpeed();
+            month = Integer.parseInt(monthForm.format(workoutDays.get(i)));
+            day =Integer.parseInt(dayForm.format(workoutDays.get(i)));
+            Weather wd = weatherdao.findByDate(2018, month, day );
+            //temp = wd.getMeanTemp();
+            if (wd != null)
+                windspeed = wd.getWindSpeed();
             dps[i] = new DataPoint(workoutDays.get(i),windspeed);
-            //y_wind.add((int)temp);
         }
         //Integer[] y_axisWind = y_wind.toArray(new Integer[y_wind.size()]);
         return dps;
@@ -388,10 +473,12 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
      * */
     private void displayGraph(DataPoint[] dps,int refresh){
         int numdates = user.getDates().size();
-        graph=(GraphView) findViewById(R.id.graph);
+
         if(refresh==0){
+            graph.removeSeries(statSeries);
             graph.addSeries(statSeries);
         }else if (refresh == 1){
+            graph.removeSeries(tempSeries);
             graph.addSeries(tempSeries);
         }
         GridLabelRenderer gridLabeX = graph.getGridLabelRenderer();
