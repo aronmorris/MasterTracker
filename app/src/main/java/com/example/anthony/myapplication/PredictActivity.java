@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -40,8 +41,7 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
     int[] trimmingIndex;
     private DataPoint[] trimedWeatherData;
     private DataPoint[] trimedWorkoutData;
-    private TextView corOutput;
-    private TextView dateout;
+
     CorrelationCalc cocc = new CorrelationCalc();
     SimpleDateFormat sd = new SimpleDateFormat("MMM-dd");
     /**
@@ -59,7 +59,7 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
         user = (User)intent.getSerializableExtra("User");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_predict);
-        dateout = (TextView)findViewById(R.id.textView7);
+
 
         final Spinner Monthspinner = (Spinner) findViewById(R.id.spinner3_Month);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -91,7 +91,7 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
          *
          * this is not working for some reason
          * **/
-        corOutput = (TextView)findViewById(R.id.TextView_Corr);
+
 
         AppDatabase db = AppDatabase.getDatabase(this);
         WeatherDao weatherDao = db.weatherDao();
@@ -101,9 +101,7 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
             Log.d("-------**---*", "Adding stuff");
             weatherDao.insertAll(WeatherDataRetriever.getWeatherArrayFromJsonFile(this));
         }
-        for (int i = 0; i<user.getDates().size();i++){
-            dateout.append(user.getDates().get(i).toString());
-        }
+
         graph=(GraphView) findViewById(R.id.graph);
         gridLabeX = graph.getGridLabelRenderer();
         gridLabeY = graph.getGridLabelRenderer();
@@ -178,10 +176,14 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         tempSeries =new LineGraphSeries<>(trimedWeatherData);
                         displayGraph(trimedWeatherData,1);
                     }catch(IllegalArgumentException e){
+                        Toast.makeText(PredictActivity.this, "No Weather Data for this Period", Toast.LENGTH_SHORT).show();
                         tempSeries =new LineGraphSeries<>(meanTempData);
-                        displayGraph(meanTempData,1);
                     }
                     tempSeries.setTitle("Mean Temperature C");
+                    tempSeries.setColor(Color.parseColor("#000000"));
+                    tempSeries.setDrawDataPoints(true);
+                    tempSeries.setDataPointsRadius(6);
+                    tempSeries.setThickness(4);
 
                 }else if(position==1){
 
@@ -190,10 +192,14 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         tempSeries =new LineGraphSeries<>(trimedWeatherData);
                         displayGraph(trimedWeatherData,1);
                     }catch(IllegalArgumentException e){
+                        Toast.makeText(PredictActivity.this, "No Weather Data for this Period", Toast.LENGTH_SHORT).show();
                         tempSeries =new LineGraphSeries<>(maxTempData);
-                        displayGraph(maxTempData,1);
                     }
                     tempSeries.setTitle("Max Temperature C");
+                    tempSeries.setColor(Color.parseColor("#ff6214"));
+                    tempSeries.setDrawDataPoints(true);
+                    tempSeries.setDataPointsRadius(6);
+                    tempSeries.setThickness(4);
                 }else if(position==2){
 
                     try{
@@ -201,20 +207,28 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         tempSeries =new LineGraphSeries<>(trimedWeatherData);
                         displayGraph(trimedWeatherData,1);
                     }catch(IllegalArgumentException e){
+                        Toast.makeText(PredictActivity.this, "No Weather Data for this Period", Toast.LENGTH_SHORT).show();
                         tempSeries =new LineGraphSeries<>(minTempData);
-                        displayGraph(minTempData,1);
                     }
                     tempSeries.setTitle("Min Temperature C");
+                    tempSeries.setColor(Color.parseColor("#7080ff"));
+                    tempSeries.setDrawDataPoints(true);
+                    tempSeries.setDataPointsRadius(6);
+                    tempSeries.setThickness(4);
                 }else if(position==3){
                     try{
                         trimedWeatherData = Arrays.copyOfRange(windData,trimmingIndex[0],trimmingIndex[1]);
                         tempSeries =new LineGraphSeries<>(trimedWeatherData);
                         displayGraph(trimedWeatherData,1);
                     }catch(IllegalArgumentException e){
+                        Toast.makeText(PredictActivity.this, "No Weather Data for this Period", Toast.LENGTH_SHORT).show();
                         tempSeries =new LineGraphSeries<>(windData);
-                        displayGraph(windData,1);
                     }
                     tempSeries.setTitle("Wind Speed (KM/h)");
+                    tempSeries.setColor(Color.parseColor("#cefffe"));
+                    tempSeries.setDrawDataPoints(true);
+                    tempSeries.setDataPointsRadius(6);
+                    tempSeries.setThickness(4);
                 }
             }
 
@@ -240,8 +254,8 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         displayGraph(trimedWorkoutData,0);
 
                     }catch(IllegalArgumentException e){
-                        statSeries = new LineGraphSeries<>(speeddata);
-                        displayGraph(speeddata,0);
+                        Toast.makeText(PredictActivity.this, "No Workout Data for this Period", Toast.LENGTH_SHORT).show();
+                        statSeries =new LineGraphSeries<>(speeddata);
                     }
                     statSeries.setTitle("Average Speed (KM/h)");
                     statSeries.setColor(Color.RED);
@@ -269,11 +283,11 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         statSeries = new LineGraphSeries<>(trimedWorkoutData);
                         displayGraph(trimedWorkoutData,0);
                     }catch(IllegalArgumentException e){
-                        statSeries = new LineGraphSeries<>(distancedata);
-                        displayGraph(distancedata,0);
+                        Toast.makeText(PredictActivity.this, "No Workout Data for this Period", Toast.LENGTH_SHORT).show();
+                        statSeries =new LineGraphSeries<>(distancedata);
                     }
-                    statSeries.setTitle("Average Speed (KM)");
-                    statSeries.setColor(Color.RED);
+                    statSeries.setTitle("Distance (KM)");
+                    statSeries.setColor(Color.GREEN);
                     statSeries.setDrawDataPoints(true);
                     statSeries.setDataPointsRadius(10);
                     statSeries.setThickness(8);
@@ -298,11 +312,11 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
                         statSeries = new LineGraphSeries<>(trimedWorkoutData);
                         displayGraph(trimedWorkoutData,0);
                     }catch(IllegalArgumentException e){
-                        statSeries = new LineGraphSeries<>(durationdata);
-                        displayGraph(durationdata,0);
+                        Toast.makeText(PredictActivity.this, "No Workout Data for this Period", Toast.LENGTH_SHORT).show();
+                        statSeries =new LineGraphSeries<>(durationdata);
                     }
                     statSeries.setTitle("Duration (Minutes)");
-                    statSeries.setColor(Color.RED);
+                    statSeries.setColor(Color.BLUE);
                     statSeries.setDrawDataPoints(true);
                     statSeries.setDataPointsRadius(10);
                     statSeries.setThickness(8);
@@ -513,6 +527,8 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
         graph.getViewport().setScalableY(true);
         graph.getViewport().setScalable(true);
         gridLabeX.setHorizontalAxisTitle("Dates");
+        graph.getLegendRenderer().setVisible(true);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
     }
 
@@ -538,7 +554,7 @@ public class PredictActivity extends AppCompatActivity implements AsyncResponse{
 
     @Override
     public void proccessFinished(int cor) {
-        corOutput.append(" "+cor);
+
     }
 }
 
