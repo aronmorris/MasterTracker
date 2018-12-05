@@ -30,11 +30,10 @@ Step 5: Select the APK file. Proceed when prompted for installation
 Step 6: Run your app 
 
 
-
-
--Go through the app slowly, from time to time it will crash if the user goes to different sections of the App too quickly.
+-Data fetching from endomodo is slow so you may want to wait on the main page after loging in for a couple of seconds. youll notice the buttons for 
+stats and prediction are disabled during this time.
 
 -There were some issues accross devices/ emulators. If the app crashes, just open and try again. It does function as advertised.
 
--In predictions, some Months do not have data to display, try another month and pick a option, spped, distance, max temp ect.
+-with the default endomondo account In predictions, some Months do not have data to display, try another month and pick a option, spped, distance, max temp ect.
 
